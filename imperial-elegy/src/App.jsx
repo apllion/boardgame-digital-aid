@@ -41,7 +41,7 @@ export default function App() {
   return (
     <div>
       <h1>Imperial Elegy</h1>
-      <p className="subtitle">Game Aid</p>
+      <p className="subtitle">Game Aid <span style={{ fontSize: '0.7rem', color: '#555' }}>v0.3.0</span></p>
 
       {!started ? (
         <Setup config={config} onConfigChange={setConfig} onStart={handleStart} />
