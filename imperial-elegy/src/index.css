@@ -616,3 +616,16 @@ h3 {
   color: #fff;
   border-bottom-color: #4a5adb;
 }
+
+/* Rule section links */
+.rule-link {
+  color: #7c9cff;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  font-size: 0.75em;
+}
+
+.rule-link:active {
+  color: #fff;
+}

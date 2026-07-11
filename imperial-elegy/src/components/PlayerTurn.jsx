@@ -35,8 +35,31 @@ function MenuItem({ title, borderColor, onClick }) {
   )
 }
 
+// Parse text for [section.number] references and make them tappable
+function RuleText({ text, onRuleLink }) {
+  if (!onRuleLink) return text
+  const parts = text.split(/(\[\d+\.\d+(?:\.\d+)?\])/g)
+  return parts.map((part, i) => {
+    const match = part.match(/^\[(\d+\.\d+(?:\.\d+)?)\]$/)
+    if (match) {
+      return (
+        <span
+          key={i}
+          className="rule-link"
+          role="button"
+          tabIndex={0}
+          onClick={(e) => { e.stopPropagation(); onRuleLink(match[1]) }}
+        >
+          {part}
+        </span>
+      )
+    }
+    return part
+  })
+}
+
 // Sub-view content components
-function ActionsView({ isWartime }) {
+function ActionsView({ isWartime, onRuleLink }) {
   const actions = isWartime ? WARTIME_ACTIONS_DETAILED : PEACETIME_ACTIONS
   return (
     <table className="reference-table">
@@ -46,7 +69,7 @@ function ActionsView({ isWartime }) {
           <tr key={i}>
             <td style={{ textAlign: 'left' }}>
               <strong>{a.name}</strong>
-              <div style={{ fontSize: '0.7rem', color: '#999', marginTop: '0.15rem' }}>{a.detail}</div>
+              <div style={{ fontSize: '0.7rem', color: '#999', marginTop: '0.15rem' }}><RuleText text={a.detail} onRuleLink={onRuleLink} /></div>
             </td>
             <td style={{ whiteSpace: 'nowrap', fontWeight: 600 }}>{a.cost}</td>
           </tr>
@@ -56,13 +79,14 @@ function ActionsView({ isWartime }) {
   )
 }
 
-function CombatView() {
+function CombatView({ onRuleLink }) {
+  const R = ({text}) => <RuleText text={text} onRuleLink={onRuleLink} />
   return (
     <div>
       <div className="card" style={{ borderLeftColor: '#c0392b' }}>
         <div className="card-title">Land Battle Sequence</div>
         <ol className="rules-list" style={{ paddingLeft: '1.2rem' }}>
-          {BATTLE_SEQUENCE.map((s, i) => <li key={i} style={{ listStyle: 'decimal' }}>{s}</li>)}
+          {BATTLE_SEQUENCE.map((s, i) => <li key={i} style={{ listStyle: 'decimal' }}><R text={s} /></li>)}
         </ol>
       </div>
 
@@ -90,7 +114,7 @@ function CombatView() {
             {LAND_COMBAT_MODIFIERS.map((m, i) => (
               <tr key={i}>
                 <td style={{ textAlign: 'left', fontWeight: 600 }}>{m.name}</td>
-                <td style={{ textAlign: 'left' }}>{m.detail}</td>
+                <td style={{ textAlign: 'left' }}><R text={m.detail} /></td>
               </tr>
             ))}
           </tbody>
@@ -104,7 +128,7 @@ function CombatView() {
             {NAVAL_COMBAT_MODIFIERS.map((m, i) => (
               <tr key={i}>
                 <td style={{ textAlign: 'left', fontWeight: 600 }}>{m.name}</td>
-                <td style={{ textAlign: 'left' }}>{m.detail}</td>
+                <td style={{ textAlign: 'left' }}><R text={m.detail} /></td>
               </tr>
             ))}
           </tbody>
@@ -114,28 +138,29 @@ function CombatView() {
       <div className="card" style={{ borderLeftColor: '#888', marginTop: '0.5rem' }}>
         <div className="card-title">Support</div>
         <ul className="rules-list">
-          {SUPPORT_RULES.map((r, i) => <li key={i}>{r}</li>)}
+          {SUPPORT_RULES.map((r, i) => <li key={i}><R text={r} /></li>)}
         </ul>
       </div>
 
       <div className="card" style={{ borderLeftColor: '#888', marginTop: '0.5rem' }}>
         <div className="card-title">EF Special Rules</div>
         <ul className="rules-list">
-          {EF_RULES.map((r, i) => <li key={i}>{r}</li>)}
+          {EF_RULES.map((r, i) => <li key={i}><R text={r} /></li>)}
         </ul>
       </div>
     </div>
   )
 }
 
-function WarAimsView() {
+function WarAimsView({ onRuleLink }) {
+  const R = ({text}) => <RuleText text={text} onRuleLink={onRuleLink} />
   return (
     <div>
       <div className="card" style={{ borderLeftColor: '#d4a017' }}>
         <div className="card-title">War Aims</div>
         {WAR_AIMS.types.map((t, i) => (
           <div key={i} style={{ marginBottom: '0.5rem' }}>
-            <strong>{t.name}:</strong> <span className="card-detail">{t.detail}</span>
+            <strong>{t.name}:</strong> <span className="card-detail"><R text={t.detail} /></span>
           </div>
         ))}
       </div>
@@ -143,7 +168,7 @@ function WarAimsView() {
         <div className="card-title">Victory Types</div>
         {VICTORY_TYPES.map((v, i) => (
           <div key={i} style={{ marginBottom: '0.4rem' }}>
-            <strong>{v.name}:</strong> <span className="card-detail">{v.detail}</span>
+            <strong>{v.name}:</strong> <span className="card-detail"><R text={v.detail} /></span>
           </div>
         ))}
       </div>
@@ -151,14 +176,14 @@ function WarAimsView() {
         <div className="card-title">Treaty Options</div>
         {TREATY_OPTIONS.map((t, i) => (
           <div key={i} style={{ marginBottom: '0.4rem' }}>
-            <strong>{t.name}:</strong> <span className="card-detail">{t.detail}</span>
+            <strong>{t.name}:</strong> <span className="card-detail"><R text={t.detail} /></span>
           </div>
         ))}
       </div>
       <div className="card" style={{ borderLeftColor: '#c0392b' }}>
         <div className="card-title">Refusing a Call to War</div>
         <ul className="rules-list">
-          {REFUSING_WAR.map((r, i) => <li key={i}>{r}</li>)}
+          {REFUSING_WAR.map((r, i) => <li key={i}><R text={r} /></li>)}
         </ul>
       </div>
     </div>
@@ -220,6 +245,13 @@ export default function PlayerTurn({ powerId }) {
   const power = POWERS[powerId]
   const subView = useSubView()
 
+  function openRules(section) {
+    subView.push({
+      title: `Rules [${section}]`,
+      render: () => <RulesViewer section={section} />,
+    })
+  }
+
   // If a sub-view is active, render it with a back bar
   if (subView.current) {
     return (
@@ -263,7 +295,7 @@ export default function PlayerTurn({ powerId }) {
           title={isWartime ? 'Wartime Actions' : 'Peacetime Actions'}
           onClick={() => subView.push({
             title: isWartime ? 'Wartime Actions' : 'Peacetime Actions',
-            render: () => <ActionsView isWartime={isWartime} />,
+            render: () => <ActionsView isWartime={isWartime} onRuleLink={openRules} />,
           })}
         />
         <MenuItem
@@ -271,7 +303,7 @@ export default function PlayerTurn({ powerId }) {
           borderColor="#c0392b"
           onClick={() => subView.push({
             title: 'Combat & CRT',
-            render: () => <CombatView />,
+            render: () => <CombatView onRuleLink={openRules} />,
           })}
         />
         <MenuItem
@@ -279,7 +311,7 @@ export default function PlayerTurn({ powerId }) {
           borderColor="#d4a017"
           onClick={() => subView.push({
             title: 'War Aims & Treaties',
-            render: () => <WarAimsView />,
+            render: () => <WarAimsView onRuleLink={openRules} />,
           })}
         />
         <MenuItem
