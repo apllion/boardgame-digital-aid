@@ -135,13 +135,28 @@ function WarAimsView({ onRuleLink }) {
   const R = ({text}) => <RuleText text={text} onRuleLink={onRuleLink} />
   return (
     <div>
-      <div className="card" style={{ borderLeftColor: '#d4a017' }}>
-        <div className="card-title">War Aims</div>
-        {WAR_AIMS.types.map((t, i) => (
-          <div key={i} style={{ marginBottom: '0.5rem' }}>
-            <strong>{t.name}:</strong> <span className="card-detail"><R text={t.detail} /></span>
-          </div>
-        ))}
+      {WAR_AIMS.types.map((t, i) => (
+        <div key={i} className="card" style={{ borderLeftColor: '#d4a017' }}>
+          <div className="card-title">{t.name}</div>
+          <div className="card-detail"><R text={t.detail} /></div>
+          <div style={{ fontSize: '0.8rem', color: '#aaa', marginTop: '0.35rem' }}><strong>Who:</strong> <R text={t.who} /></div>
+          <div style={{ fontSize: '0.8rem', color: '#c0392b', marginTop: '0.2rem' }}><strong>Cannot:</strong> <R text={t.cannot} /></div>
+        </div>
+      ))}
+
+      <div className="card" style={{ borderLeftColor: '#4a5adb' }}>
+        <div className="card-title">Quick Decision Guide</div>
+        <table className="reference-table">
+          <thead><tr><th style={{ textAlign: 'left' }}>Situation</th><th>War Aim</th></tr></thead>
+          <tbody>
+            {WAR_AIMS.guide.map((g, i) => (
+              <tr key={i}>
+                <td style={{ textAlign: 'left' }}>{g.situation}</td>
+                <td style={{ fontWeight: 600 }}>{g.aim}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       <div className="card" style={{ borderLeftColor: '#888' }}>
         <div className="card-title">Victory Types</div>

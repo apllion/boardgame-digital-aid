@@ -173,9 +173,34 @@ export const SUPPORT_RULES = [
 // War Aims [13.0]
 export const WAR_AIMS = {
   types: [
-    { name: 'Liberation', detail: 'Target up to two spaces. Retake home spaces or liberate spaces in open rebellion. [13.1]' },
-    { name: 'Unification', detail: 'Target up to two spaces containing the unifier\'s nationality (or citizenship for AU). [13.2]' },
-    { name: 'Conquest', detail: 'Target up to two spaces, only one can be a key. Increases WTT by one, decrease stability by WTT after increase. [13.3]' },
+    {
+      name: 'Liberation',
+      detail: 'Target up to two spaces. Retake home spaces or liberate spaces in open rebellion (with WoI marker). No WTT increase, no stability loss. Liberated minor powers become your allies. [13.1]',
+      who: 'Any player retaking home spaces or freeing rebellions. RU: can liberate Balkans not in rebellion (Russo-Turkish Wars only). AU: can liberate Italian spaces (before unification only). [13.1.2]',
+      cannot: 'Cannot liberate dual home spaces (e.g. Alsace-Lorraine) — must use Conquest. [13.1]',
+    },
+    {
+      name: 'Unification',
+      detail: 'Target up to two spaces containing the unifier\'s nationality. No WTT increase, no stability loss. [13.2]',
+      who: 'GE: German unification spaces. AU: spaces with nationalities that have AU citizenship. Any player with diplomacy/ally on Sardinia-Piedmont or Two Sicilies: Italian unification. [13.2, 13.2.1]',
+      cannot: 'Target must contain the relevant nationality.',
+    },
+    {
+      name: 'Conquest',
+      detail: 'Target up to two spaces, max 1 key. Cannot target capitals/subcapitals. +1 WTT, lose stability = WTT after increase. [13.3]',
+      who: 'Any player. Required when target doesn\'t qualify for Liberation or Unification.',
+      cannot: 'Cannot target capitals or subcapitals. [13.3.1]',
+    },
+  ],
+  guide: [
+    { situation: 'Retaking your own home space', aim: 'Liberation' },
+    { situation: 'Freeing a space in rebellion (WoI)', aim: 'Liberation' },
+    { situation: 'GE absorbing German minors', aim: 'Unification' },
+    { situation: 'AU absorbing citizenship nationalities', aim: 'Unification' },
+    { situation: 'Unifying Italy (with diplomacy/ally)', aim: 'Unification' },
+    { situation: 'Taking enemy territory', aim: 'Conquest (costly!)' },
+    { situation: 'Retaking a dual home space (e.g. Alsace)', aim: 'Conquest (no choice)' },
+    { situation: 'RU attacking OT Balkans via home card', aim: 'Liberation' },
   ],
 }
 
