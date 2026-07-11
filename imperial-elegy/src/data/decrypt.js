@@ -6,29 +6,22 @@ async function deriveKey(passphrase) {
   return crypto.subtle.importKey('raw', hash, 'AES-GCM', false, ['decrypt'])
 }
 
-function b64ToArrayBuffer(base64) {
-  const binary = atob(base64)
-  const bytes = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i)
-  }
-  return bytes.buffer
-}
-
-export async function decryptRulebook(passphrase) {
+export async function decryptPDF(passphrase) {
   const base = import.meta.env.BASE_URL || '/'
-  const res = await fetch(`${base}rulebook.enc.json`)
-  const { iv, data } = await res.json()
+  const res = await fetch(`${base}rulebook.enc.bin`)
+  const buf = await res.arrayBuffer()
+  const data = new Uint8Array(buf)
+
+  // First 12 bytes are the IV, rest is ciphertext
+  const iv = data.slice(0, 12)
+  const ciphertext = data.slice(12)
 
   const key = await deriveKey(passphrase)
-  const ivBuf = b64ToArrayBuffer(iv)
-  const cipherBuf = b64ToArrayBuffer(data)
-
   const plainBuf = await crypto.subtle.decrypt(
-    { name: 'AES-GCM', iv: ivBuf },
+    { name: 'AES-GCM', iv },
     key,
-    cipherBuf,
+    ciphertext,
   )
 
-  return new TextDecoder().decode(plainBuf)
+  return new Blob([plainBuf], { type: 'application/pdf' })
 }
