@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Board Game Digital Aid</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      max-width: 500px;
+      width: 100%;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .subtitle { color: #888; font-size: 0.85rem; margin-bottom: 2rem; }
+    .games {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    a.game-card {
+      display: block;
+      padding: 1.25rem;
+      background: #252540;
+      border: 2px solid #333;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #e0e0e0;
+      transition: all 0.15s;
+    }
+    a.game-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      border-color: #555;
+    }
+    a.game-card:active { transform: scale(0.98); }
+    .game-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .game-desc { font-size: 0.8rem; color: #999; }
+    .game-badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+    /* Gate */
+    #gate {
+      text-align: center;
+    }
+    #gate input {
+      padding: 0.6rem 1rem;
+      border: 2px solid #444;
+      border-radius: 6px;
+      background: #252540;
+      color: #e0e0e0;
+      font-size: 1rem;
+      text-align: center;
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 0.75rem;
+    }
+    #gate input:focus { outline: none; border-color: #4a5adb; }
+    #gate button {
+      display: block;
+      margin: 0 auto;
+      padding: 0.6rem 2rem;
+      border: none;
+      border-radius: 6px;
+      background: #4a5adb;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #gate .error { color: #c62828; font-size: 0.8rem; margin-top: 0.5rem; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Board Game Digital Aid</h1>
+
+    <!-- Passphrase gate -->
+    <div id="gate">
+      <p class="subtitle">Enter passphrase</p>
+      <input type="password" id="passphrase" placeholder="Passphrase" autofocus />
+      <button onclick="checkPass()">Enter</button>
+      <div id="error" class="error hidden"></div>
+    </div>
+
+    <!-- Game selector (hidden until authenticated) -->
+    <div id="content" class="hidden">
+      <p class="subtitle">Choose a game</p>
+      <div class="games">
+        <a class="game-card" href="./imperial-elegy/" style="border-color: #5a5a5a;">
+          <div class="game-title">Imperial Elegy</div>
+          <div class="game-desc">VUCA Simulations &middot; Bot aid &amp; player guide for the road to the Great War 1850-1920</div>
+          <span class="game-badge" style="background: #3a3a6a; color: #aac;">Bot + Player Aid</span>
+        </a>
+        <a class="game-card" href="./coinbots/" style="border-color: #4a7a4a;">
+          <div class="game-title">COIN Bots</div>
+          <div class="game-desc">Non-player faction flowcharts for Cuba Libre, A Distant Plain</div>
+          <span class="game-badge" style="background: #2e5a2e; color: #aca;">Bot Flowcharts</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // SHA-256 hash of the passphrase
+    const HASH = '168d5bafb322cb3bbcc811d906b3a7d95f0a74a3a3247db0ada5948926e089ea';
+
+    async function sha256(text) {
+      const data = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Auto-unlock if previously authenticated this session
+    if (sessionStorage.getItem('bgda-auth') === '1') {
+      document.getElementById('gate').classList.add('hidden');
+      document.getElementById('content').classList.remove('hidden');
+    }
+
+    async function checkPass() {
+      const input = document.getElementById('passphrase').value;
+      const hash = await sha256(input);
+      if (hash === HASH) {
+        sessionStorage.setItem('bgda-auth', '1');
+        document.getElementById('gate').classList.add('hidden');
+        document.getElementById('content').classList.remove('hidden');
+      } else {
+        document.getElementById('error').textContent = 'Wrong passphrase';
+        document.getElementById('error').classList.remove('hidden');
+      }
+    }
+
+    // Enter key submits
+    document.getElementById('passphrase').addEventListener('keydown', e => {
+      if (e.key === 'Enter') checkPass();
+    });
+  </script>
+</body>
+</html>
