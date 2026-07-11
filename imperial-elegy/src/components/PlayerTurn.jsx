@@ -11,6 +11,7 @@ import {
   EF_RULES,
 } from '../data/playerAid'
 import DiceRoll from './DiceRoll'
+import RulesViewer from './RulesViewer'
 
 // Each "page" is a { id, title, render } object
 function useSubView() {
@@ -301,6 +302,14 @@ export default function PlayerTurn({ powerId }) {
           onClick={() => subView.push({
             title: 'National Characteristics',
             render: () => <NationalTraitsView powerId={powerId} />,
+          })}
+        />
+        <MenuItem
+          title="Search Rulebook"
+          borderColor="#4a5adb"
+          onClick={() => subView.push({
+            title: 'Rulebook',
+            render: () => <RulesViewer />,
           })}
         />
       </div>
