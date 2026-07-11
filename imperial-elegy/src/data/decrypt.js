@@ -1,4 +1,6 @@
-// Decrypt AES-256-GCM encrypted data using Web Crypto API
+// Decrypt AES-256-GCM encrypted PDF, cached globally
+
+let cachedPdfData = null
 
 async function deriveKey(passphrase) {
   const enc = new TextEncoder()
@@ -7,12 +9,13 @@ async function deriveKey(passphrase) {
 }
 
 export async function decryptPDF(passphrase) {
+  if (cachedPdfData) return cachedPdfData
+
   const base = import.meta.env.BASE_URL || '/'
   const res = await fetch(`${base}rulebook.enc.bin`)
   const buf = await res.arrayBuffer()
   const data = new Uint8Array(buf)
 
-  // First 12 bytes are the IV, rest is ciphertext
   const iv = data.slice(0, 12)
   const ciphertext = data.slice(12)
 
@@ -23,5 +26,6 @@ export async function decryptPDF(passphrase) {
     ciphertext,
   )
 
-  return new Blob([plainBuf], { type: 'application/pdf' })
+  cachedPdfData = new Uint8Array(plainBuf)
+  return cachedPdfData
 }
