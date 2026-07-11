@@ -12,6 +12,7 @@ import {
 } from '../data/playerAid'
 import DiceRoll from './DiceRoll'
 import RulesViewer from './RulesViewer'
+import RuleText from './RuleText'
 
 // Each "page" is a { id, title, render } object
 function useSubView() {
@@ -35,28 +36,6 @@ function MenuItem({ title, borderColor, onClick }) {
   )
 }
 
-// Parse text for [section.number] references and make them tappable
-function RuleText({ text, onRuleLink }) {
-  if (!onRuleLink) return text
-  const parts = text.split(/(\[\d+\.\d+(?:\.\d+)?\])/g)
-  return parts.map((part, i) => {
-    const match = part.match(/^\[(\d+\.\d+(?:\.\d+)?)\]$/)
-    if (match) {
-      return (
-        <span
-          key={i}
-          className="rule-link"
-          role="button"
-          tabIndex={0}
-          onClick={(e) => { e.stopPropagation(); onRuleLink(match[1]) }}
-        >
-          {part}
-        </span>
-      )
-    }
-    return part
-  })
-}
 
 // Sub-view content components
 function ActionsView({ isWartime, onRuleLink }) {

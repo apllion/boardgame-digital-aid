@@ -3,10 +3,15 @@ import { useGameContext } from '@shared/game-tree'
 import { SEQUENCE_OF_PLAY } from '../data/playerAid'
 import { END_PHASE } from '../data/botRules'
 import RulesViewer from './RulesViewer'
+import RuleText from './RuleText'
 
 export default function EndPhaseView() {
   const ctx = useGameContext()
   const [subView, setSubView] = useState(null)
+
+  function openRules(section) {
+    setSubView({ title: `Rules [${section}]`, render: () => <RulesViewer section={section} /> })
+  }
 
   if (subView) {
     return (
@@ -25,9 +30,9 @@ export default function EndPhaseView() {
   return (
     <div>
       <div className="card info">
-        <div className="card-title">End Phase [20.0]</div>
+        <div className="card-title"><RuleText text="End Phase [20.0]" onRuleLink={openRules} /></div>
         <ul className="rules-list">
-          {SEQUENCE_OF_PLAY[3].steps.map((s, i) => <li key={i}>{s}</li>)}
+          {SEQUENCE_OF_PLAY[3].steps.map((s, i) => <li key={i}><RuleText text={s} onRuleLink={openRules} /></li>)}
         </ul>
         {ctx.bots.size > 0 && (
           <div style={{ marginTop: '0.5rem', padding: '0.4rem', background: '#1a1a3e', borderRadius: '6px', fontSize: '0.8rem', color: '#aaa' }}>
@@ -37,10 +42,7 @@ export default function EndPhaseView() {
       </div>
 
       <div className="gt-children-list" style={{ marginTop: '0.75rem' }}>
-        <button className="gt-child-item" style={{ borderLeftColor: '#4a5adb' }} onClick={() => setSubView({
-          title: 'Rulebook',
-          render: () => <RulesViewer section="20.0" />,
-        })}>
+        <button className="gt-child-item" style={{ borderLeftColor: '#4a5adb' }} onClick={() => openRules('20.0')}>
           <span className="gt-child-label">Search Rulebook</span>
           <span className="gt-child-arrow">&rsaquo;</span>
         </button>

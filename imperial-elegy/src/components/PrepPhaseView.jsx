@@ -3,10 +3,15 @@ import { useGameContext } from '@shared/game-tree'
 import { SEQUENCE_OF_PLAY } from '../data/playerAid'
 import { PREP_PHASE } from '../data/botRules'
 import RulesViewer from './RulesViewer'
+import RuleText from './RuleText'
 
 export default function PrepPhaseView() {
   const ctx = useGameContext()
   const [subView, setSubView] = useState(null)
+
+  function openRules(section) {
+    setSubView({ title: `Rules [${section}]`, render: () => <RulesViewer section={section} /> })
+  }
 
   if (subView) {
     return (
@@ -25,9 +30,9 @@ export default function PrepPhaseView() {
   return (
     <div>
       <div className="card info">
-        <div className="card-title">Prep Phase [10.0]</div>
+        <div className="card-title"><RuleText text="Prep Phase [10.0]" onRuleLink={openRules} /></div>
         <ul className="rules-list">
-          {SEQUENCE_OF_PLAY[0].steps.map((s, i) => <li key={i}>{s}</li>)}
+          {SEQUENCE_OF_PLAY[0].steps.map((s, i) => <li key={i}><RuleText text={s} onRuleLink={openRules} /></li>)}
         </ul>
         {ctx.bots.size > 0 && (
           <div style={{ marginTop: '0.5rem', padding: '0.4rem', background: '#1a1a3e', borderRadius: '6px', fontSize: '0.8rem', color: '#aaa' }}>
@@ -37,9 +42,9 @@ export default function PrepPhaseView() {
       </div>
 
       <div className="card highlight">
-        <div className="card-title">Diplomacy Phase [11.0]</div>
+        <div className="card-title"><RuleText text="Diplomacy Phase [11.0]" onRuleLink={openRules} /></div>
         <ul className="rules-list">
-          {SEQUENCE_OF_PLAY[1].steps.map((s, i) => <li key={i}>{s}</li>)}
+          {SEQUENCE_OF_PLAY[1].steps.map((s, i) => <li key={i}><RuleText text={s} onRuleLink={openRules} /></li>)}
         </ul>
         {ctx.bots.size > 0 && (
           <div style={{ marginTop: '0.5rem', padding: '0.4rem', background: '#1a1a3e', borderRadius: '6px', fontSize: '0.8rem', color: '#aaa' }}>
@@ -49,10 +54,7 @@ export default function PrepPhaseView() {
       </div>
 
       <div className="gt-children-list" style={{ marginTop: '0.75rem' }}>
-        <button className="gt-child-item" style={{ borderLeftColor: '#4a5adb' }} onClick={() => setSubView({
-          title: 'Rulebook',
-          render: () => <RulesViewer section="10.0" />,
-        })}>
+        <button className="gt-child-item" style={{ borderLeftColor: '#4a5adb' }} onClick={() => openRules('10.0')}>
           <span className="gt-child-label">Search Rulebook</span>
           <span className="gt-child-arrow">&rsaquo;</span>
         </button>
