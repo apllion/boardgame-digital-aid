@@ -2,3 +2,5 @@ node_modules/
 dist/
 .vite/
 *.local
+*.enc.bin
+*.enc.json
