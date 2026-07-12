@@ -143,7 +143,6 @@
       const hash = await sha256(input);
       if (hash === HASH) {
         sessionStorage.setItem('bgda-auth', '1');
-        sessionStorage.setItem('bgda-key', input);
         document.getElementById('gate').classList.add('hidden');
         document.getElementById('content').classList.remove('hidden');
       } else {

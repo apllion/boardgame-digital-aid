@@ -15,7 +15,6 @@ import { lookupBMPIT } from '../data/bmpit'
 import DiceRoll from './DiceRoll'
 import BDITTable from './BDITTable'
 import BMPITTable from './BMPITTable'
-import RulesViewer from './RulesViewer'
 
 const PHASES = ['card', 'priority1', 'priority2', 'excess', 'done']
 const PHASE_LABELS = ['Card', 'Priority 1', 'Priority 2', 'Excess CP', 'Done']
@@ -323,10 +322,6 @@ export default function BotImpulse({ powerId }) {
             <span className="gt-child-label">Bot Wartime Rules</span>
             <span className="gt-child-arrow">&rsaquo;</span>
           </button>
-          <button className="gt-child-item" style={{ borderLeftColor: '#4a5adb' }} onClick={() => setSubView('rulebook')}>
-            <span className="gt-child-label">Search Rulebook</span>
-            <span className="gt-child-arrow">&rsaquo;</span>
-          </button>
         </div>
       )}
 
@@ -340,7 +335,6 @@ export default function BotImpulse({ powerId }) {
                 {subView === 'bmpit' && 'BMPIT Table'}
                 {subView === 'quick-ref' && 'Quick Reference'}
                 {subView === 'war-rules' && 'Bot Wartime Rules'}
-                {subView === 'rulebook' && 'Rulebook'}
               </span>
             </div>
           </div>
@@ -382,7 +376,6 @@ export default function BotImpulse({ powerId }) {
               <div className="card-detail" style={{ fontStyle: 'italic' }}>{BOT_WARTIME_BEHAVIOR.note}</div>
             </div>
           )}
-          {subView === 'rulebook' && <RulesViewer />}
         </div>
       )}
     </div>
