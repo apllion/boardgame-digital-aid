@@ -11,6 +11,7 @@ import {
   EF_RULES,
 } from '../data/playerAid'
 import DiceRoll from './DiceRoll'
+import { TRICKY_RULES } from '../data/trickyRules'
 
 function useSubView() {
   const [stack, setStack] = useState([])
@@ -227,6 +228,57 @@ function NationalTraitsView({ powerId }) {
   )
 }
 
+function TrickyRulesMenu({ onSelect }) {
+  return (
+    <div className="gt-children-list">
+      {TRICKY_RULES.map(rule => (
+        <button
+          key={rule.id}
+          className="gt-child-item"
+          style={{ borderLeftColor: '#f9a825' }}
+          onClick={() => onSelect(rule)}
+        >
+          <span className="gt-child-label">{rule.title}</span>
+          <span className="gt-child-arrow">&rsaquo;</span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function TrickyRuleView({ rule }) {
+  return (
+    <div>
+      <div className="card" style={{ borderLeftColor: '#f9a825' }}>
+        <div className="card-detail" style={{ fontStyle: 'italic' }}>{rule.summary}</div>
+      </div>
+
+      <div className="card" style={{ borderLeftColor: '#4caf50' }}>
+        <div className="card-title">Steps</div>
+        <ol className="rules-list" style={{ paddingLeft: '1.2rem' }}>
+          {rule.steps.map((s, i) => <li key={i} style={{ listStyle: 'decimal' }}>{s}</li>)}
+        </ol>
+      </div>
+
+      {rule.modifiers.length > 0 && (
+        <div className="card" style={{ borderLeftColor: '#2e5ea8' }}>
+          <div className="card-title">Modifiers / DRMs</div>
+          <ul className="rules-list">
+            {rule.modifiers.map((m, i) => <li key={i}>{m}</li>)}
+          </ul>
+        </div>
+      )}
+
+      <div className="card" style={{ borderLeftColor: '#c0392b' }}>
+        <div className="card-title">Gotchas</div>
+        <ul className="rules-list">
+          {rule.gotchas.map((g, i) => <li key={i}>{g}</li>)}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
 export default function PlayerTurn({ powerId }) {
   const ctx = useGameContext()
   const { isWartime } = ctx
@@ -310,6 +362,17 @@ export default function PlayerTurn({ powerId }) {
           onClick={() => subView.push({
             title: 'National Characteristics',
             render: () => <NationalTraitsView powerId={powerId} />,
+          })}
+        />
+        <MenuItem
+          title="Tricky Rules"
+          borderColor="#f9a825"
+          onClick={() => subView.push({
+            title: 'Tricky Rules',
+            render: () => <TrickyRulesMenu onSelect={(rule) => subView.push({
+              title: rule.title,
+              render: () => <TrickyRuleView rule={rule} />,
+            })} />,
           })}
         />
       </div>
