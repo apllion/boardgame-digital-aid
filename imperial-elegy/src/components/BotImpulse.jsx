@@ -134,7 +134,6 @@ export default function BotImpulse({ powerId }) {
               {homeCardRules.note && (
                 <p className="card-detail" style={{ marginTop: '0.5rem', fontStyle: 'italic' }}>{homeCardRules.note}</p>
               )}
-              <DiceRoll label="(if needed)" onRoll={() => {}} />
             </div>
           )}
 

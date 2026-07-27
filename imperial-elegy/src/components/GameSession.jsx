@@ -3,6 +3,7 @@ import { useGameTree, SwipeableContainer, GameTreeContext } from '@shared/game-t
 import '@shared/game-tree/styles.css'
 import { buildImperialElegyTree } from '../trees/imperialElegyTree'
 import { POWERS, TURN_ORDER } from '../data/botRules'
+import DiceOverlay from './DiceOverlay'
 
 export default function GameSession({ config, onBack }) {
   const [turn, setTurn] = useState(1)
@@ -11,6 +12,7 @@ export default function GameSession({ config, onBack }) {
     Object.fromEntries(TURN_ORDER.map(id => [id, 'peace']))
   )
   const [history, setHistory] = useState([])
+  const [showDice, setShowDice] = useState(false)
 
   const cycleWarStatus = useCallback((powerId) => {
     setWarStatus(prev => {
@@ -74,6 +76,14 @@ export default function GameSession({ config, onBack }) {
           )}
           <button
             className="btn btn-secondary"
+            style={{ fontSize: '0.9rem', padding: '0.25rem 0.5rem' }}
+            onClick={() => setShowDice(true)}
+            title="Dice"
+          >
+            &#x2684;
+          </button>
+          <button
+            className="btn btn-secondary"
             style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
             onClick={onBack}
           >
@@ -97,6 +107,8 @@ export default function GameSession({ config, onBack }) {
           ))}
         </div>
       )}
+      {/* Dice overlay */}
+      {showDice && <DiceOverlay onClose={() => setShowDice(false)} />}
     </GameTreeContext.Provider>
   )
 }

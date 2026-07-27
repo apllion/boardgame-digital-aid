@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useGameContext } from '@shared/game-tree'
 import { POWERS } from '../data/botRules'
 import { HOME_CARDS, NATIONAL_CHARACTERISTICS, MINOR_POWER_ALLIANCES, MINOR_POWER_NOTES } from '../data/playerAid'
-import DiceRoll from './DiceRoll'
 import { ActionsView, CombatView, WarAimsView, TrickyRulesMenu, TrickyRuleView } from './AidViews'
 
 function useSubView() {
@@ -108,11 +107,6 @@ export default function PlayerTurn({ powerId }) {
           <div className="power-name">{power.name}</div>
           <div className="impulse-label">Player Impulse</div>
         </div>
-      </div>
-
-      <div className="card" style={{ borderLeftColor: power.color }}>
-        <div className="card-title">Dice</div>
-        <DiceRoll label="" onRoll={() => {}} />
       </div>
 
       <div className="gt-children-list">
