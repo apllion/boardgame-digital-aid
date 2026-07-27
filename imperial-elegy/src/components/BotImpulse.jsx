@@ -15,6 +15,7 @@ import { lookupBMPIT } from '../data/bmpit'
 import DiceRoll from './DiceRoll'
 import BDITTable from './BDITTable'
 import BMPITTable from './BMPITTable'
+import { CombatView, WarAimsView, TrickyRulesMenu, TrickyRuleView } from './AidViews'
 
 const PHASES = ['card', 'priority1', 'priority2', 'excess', 'done']
 const PHASE_LABELS = ['Card', 'Priority 1', 'Priority 2', 'Excess CP', 'Done']
@@ -325,6 +326,18 @@ export default function BotImpulse({ powerId }) {
             <span className="gt-child-label">Bot Wartime Rules</span>
             <span className="gt-child-arrow">&rsaquo;</span>
           </button>
+          <button className="gt-child-item" style={{ borderLeftColor: '#c0392b' }} onClick={() => setSubView('combat')}>
+            <span className="gt-child-label">Combat &amp; CRT</span>
+            <span className="gt-child-arrow">&rsaquo;</span>
+          </button>
+          <button className="gt-child-item" style={{ borderLeftColor: '#d4a017' }} onClick={() => setSubView('war-aims')}>
+            <span className="gt-child-label">War Aims &amp; Treaties</span>
+            <span className="gt-child-arrow">&rsaquo;</span>
+          </button>
+          <button className="gt-child-item" style={{ borderLeftColor: '#f9a825' }} onClick={() => setSubView('tricky')}>
+            <span className="gt-child-label">Tricky Rules</span>
+            <span className="gt-child-arrow">&rsaquo;</span>
+          </button>
         </div>
       )}
 
@@ -338,6 +351,10 @@ export default function BotImpulse({ powerId }) {
                 {subView === 'bmpit' && 'BMPIT Table'}
                 {subView === 'quick-ref' && 'Quick Reference'}
                 {subView === 'war-rules' && 'Bot Wartime Rules'}
+                {subView === 'combat' && 'Combat & CRT'}
+                {subView === 'war-aims' && 'War Aims & Treaties'}
+                {subView === 'tricky' && 'Tricky Rules'}
+                {typeof subView === 'object' && subView?.title}
               </span>
             </div>
           </div>
@@ -378,6 +395,14 @@ export default function BotImpulse({ powerId }) {
               <div className="card-detail">{BOT_WARTIME_BEHAVIOR.text}</div>
               <div className="card-detail" style={{ fontStyle: 'italic' }}>{BOT_WARTIME_BEHAVIOR.note}</div>
             </div>
+          )}
+          {subView === 'combat' && <CombatView />}
+          {subView === 'war-aims' && <WarAimsView />}
+          {subView === 'tricky' && (
+            <TrickyRulesMenu onSelect={(rule) => setSubView({ type: 'tricky-detail', title: rule.title, rule })} />
+          )}
+          {typeof subView === 'object' && subView?.type === 'tricky-detail' && (
+            <TrickyRuleView rule={subView.rule} />
           )}
         </div>
       )}
