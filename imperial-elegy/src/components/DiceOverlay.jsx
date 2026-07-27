@@ -2,14 +2,49 @@ import { useState } from 'react'
 import { POWERS, TURN_ORDER } from '../data/botRules'
 import DiceRoll from './DiceRoll'
 
+const BALKAN_STATES = ['Serbia', 'Bulgaria', 'Romania', 'Greece', 'Bosnia', 'Albania', 'Montenegro']
+const REGIONS_MAIN = ['Germany', 'Italy', 'Low Countries', 'Balkans']
+const REGIONS_SUB = ['Africa', 'Great Game', 'Jpn + Pac']
+const ALLIANCES = [
+  { label: 'Triple Alliance', color: '#c89100' },
+  { label: 'Neutral', color: '#666' },
+  { label: 'Triple Entente', color: '#1565c0' },
+]
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)]
+}
+
+function RandomPicker({ label, items, onPick, resultDisplay }) {
+  const [result, setResult] = useState(null)
+
+  function roll() {
+    const picked = pickRandom(items)
+    setResult(picked)
+    onPick(label, typeof resultDisplay === 'function' ? resultDisplay(picked) : picked)
+  }
+
+  return (
+    <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexWrap: 'wrap' }}>
+      <button className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.35rem 0.7rem' }} onClick={roll}>
+        {label}
+      </button>
+      {result !== null && (
+        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#f9a825' }}>
+          {typeof resultDisplay === 'function' ? resultDisplay(result) : result}
+        </span>
+      )}
+    </div>
+  )
+}
+
 export default function DiceOverlay({ onClose }) {
   const [randomN, setRandomN] = useState(null)
   const [randomResult, setRandomResult] = useState(null)
-  const [randomPower, setRandomPower] = useState(null)
   const [history, setHistory] = useState([])
 
   function addToHistory(label, result) {
-    setHistory(h => [{ label, result, time: Date.now() }, ...h].slice(0, 10))
+    setHistory(h => [{ label, result, time: Date.now() }, ...h].slice(0, 12))
   }
 
   function rollRandom(n) {
@@ -17,13 +52,6 @@ export default function DiceOverlay({ onClose }) {
     setRandomN(n)
     setRandomResult(result)
     addToHistory(`1-${n}`, result)
-  }
-
-  function rollPower() {
-    const idx = Math.floor(Math.random() * TURN_ORDER.length)
-    const id = TURN_ORDER[idx]
-    setRandomPower(id)
-    addToHistory('Power', POWERS[id].name)
   }
 
   return (
@@ -42,29 +70,43 @@ export default function DiceOverlay({ onClose }) {
           <DiceRoll label="2d6" count={2} onRoll={(v) => addToHistory('2d6', v.join(' + '))} />
         </div>
 
-        {/* Random power */}
+        {/* Quick random pickers */}
         <div style={{ marginTop: '1rem', borderTop: '1px solid #444', paddingTop: '0.75rem' }}>
-          <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem' }}>Random Power</div>
-          <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
-            <button className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }} onClick={rollPower}>
-              Roll
-            </button>
-            {randomPower && (
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                padding: '0.3rem 0.6rem', borderRadius: '6px',
-                background: POWERS[randomPower].color, color: POWERS[randomPower].textColor,
-                fontWeight: 700, fontSize: '0.9rem',
-              }}>
-                {POWERS[randomPower].short} — {POWERS[randomPower].name}
-              </span>
-            )}
+          <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem' }}>Quick Random</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <RandomPicker
+              label="Power"
+              items={TURN_ORDER}
+              onPick={addToHistory}
+              resultDisplay={(id) => `${POWERS[id].short} — ${POWERS[id].name}`}
+            />
+            <RandomPicker
+              label="Balkan"
+              items={BALKAN_STATES}
+              onPick={addToHistory}
+            />
+            <RandomPicker
+              label="Region"
+              items={[...REGIONS_MAIN, ...REGIONS_SUB]}
+              onPick={addToHistory}
+            />
+            <RandomPicker
+              label="Alliance"
+              items={ALLIANCES}
+              onPick={(l, v) => addToHistory(l, v)}
+              resultDisplay={(a) => a.label}
+            />
+            <RandomPicker
+              label="Home Card"
+              items={['Card 1', 'Card 2']}
+              onPick={addToHistory}
+            />
           </div>
         </div>
 
         {/* Random from N */}
         <div style={{ marginTop: '1rem', borderTop: '1px solid #444', paddingTop: '0.75rem' }}>
-          <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem' }}>Pick random (1 to N)</div>
+          <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem' }}>Pick 1 to N</div>
           <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
             {[2, 3, 4, 5, 6, 7, 8, 9, 10, 12].map(n => (
               <button
