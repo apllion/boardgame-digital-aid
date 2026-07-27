@@ -98,7 +98,7 @@ export default function DiceOverlay({ onClose }) {
             />
             <RandomPicker
               label="Home Card"
-              items={['Card 1', 'Card 2']}
+              items={['Higher numbered', 'Lower numbered']}
               onPick={addToHistory}
             />
           </div>
