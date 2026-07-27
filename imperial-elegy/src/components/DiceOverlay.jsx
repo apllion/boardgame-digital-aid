@@ -28,15 +28,31 @@ function RandomPicker({ label, items, onPick, resultDisplay }) {
     onPick(label, typeof resultDisplay === 'function' ? resultDisplay(picked) : picked)
   }
 
+  const display = (v) => typeof resultDisplay === 'function' ? resultDisplay(v) : v
+
   return (
-    <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexWrap: 'wrap' }}>
-      <button className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.35rem 0.7rem' }} onClick={roll}>
-        {label}
-      </button>
+    <div>
+      <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <button className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '0.35rem 0.7rem' }} onClick={roll}>
+          {label}
+        </button>
+        {result !== null && (
+          <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#f9a825' }}>
+            {display(result)}
+          </span>
+        )}
+      </div>
       {result !== null && (
-        <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#f9a825' }}>
-          {typeof resultDisplay === 'function' ? resultDisplay(result) : result}
-        </span>
+        <div style={{ fontSize: '0.7rem', color: '#666', marginTop: '0.15rem', marginLeft: '0.2rem' }}>
+          {items.map((item, i) => (
+            <span key={i}>
+              {i > 0 && ' · '}
+              <span style={item === result ? { color: '#f9a825', fontWeight: 600 } : undefined}>
+                {display(item)}
+              </span>
+            </span>
+          ))}
+        </div>
       )}
     </div>
   )
