@@ -21,7 +21,10 @@ const PHASE_LABELS = ['Card', 'Priority 1', 'Priority 2', 'Excess CP', 'Done']
 
 export default function BotImpulse({ powerId }) {
   const ctx = useGameContext()
-  const { difficulty, isWartime, isGW, addHistory } = ctx
+  const { difficulty, addHistory } = ctx
+  const status = ctx.getWarStatus(powerId)
+  const isWartime = status !== 'peace'
+  const isGW = status === 'gw'
   const power = POWERS[powerId]
 
   const [phase, setPhase] = useState('card')

@@ -281,7 +281,8 @@ function TrickyRuleView({ rule }) {
 
 export default function PlayerTurn({ powerId }) {
   const ctx = useGameContext()
-  const { isWartime } = ctx
+  const status = ctx.getWarStatus(powerId)
+  const isWartime = status !== 'peace'
   const power = POWERS[powerId]
   const subView = useSubView()
 

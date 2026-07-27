@@ -1,19 +1,32 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useGameTree, SwipeableContainer, GameTreeContext } from '@shared/game-tree'
 import '@shared/game-tree/styles.css'
 import { buildImperialElegyTree } from '../trees/imperialElegyTree'
-import { POWERS } from '../data/botRules'
+import { POWERS, TURN_ORDER } from '../data/botRules'
 
 export default function GameSession({ config, onBack }) {
   const [turn, setTurn] = useState(1)
-  const [isWartime, setIsWartime] = useState(false)
-  const [isGW, setIsGW] = useState(false)
+  // Per-power war status: { GE: 'peace', UK: 'war', FR: 'gw', ... }
+  const [warStatus, setWarStatus] = useState(
+    Object.fromEntries(TURN_ORDER.map(id => [id, 'peace']))
+  )
   const [history, setHistory] = useState([])
+
+  const cycleWarStatus = useCallback((powerId) => {
+    setWarStatus(prev => {
+      const current = prev[powerId]
+      const next = current === 'peace' ? 'war' : current === 'war' ? 'gw' : 'peace'
+      return { ...prev, [powerId]: next }
+    })
+  }, [])
 
   const gameCtx = useMemo(() => ({
     turn,
-    isWartime,
-    isGW,
+    warStatus,
+    // For backward compat: isWartime/isGW derived from current node's power
+    getWarStatus: (powerId) => warStatus[powerId] || 'peace',
+    isWartime: false, // overridden per-component via getWarStatus
+    isGW: false,
     bots: config.bots,
     difficulty: config.difficulty,
     addHistory: (powerId, text) => setHistory(h => [...h, { power: powerId, text }]),
@@ -21,10 +34,15 @@ export default function GameSession({ config, onBack }) {
       setTurn(t => t + 1)
       setHistory([])
     },
-  }), [turn, isWartime, isGW, config.bots, config.difficulty])
+  }), [turn, warStatus, config.bots, config.difficulty])
 
   const gameTree = useMemo(() => buildImperialElegyTree(config), [config])
   const tree = useGameTree(gameTree, gameCtx)
+
+  // Determine current power from the tree node (if on a power node)
+  const currentNode = tree.currentNode
+  const currentPowerId = currentNode?.props?.powerId || null
+  const currentStatus = currentPowerId ? warStatus[currentPowerId] : null
 
   return (
     <GameTreeContext.Provider value={gameCtx}>
@@ -45,20 +63,13 @@ export default function GameSession({ config, onBack }) {
           >&rsaquo;</button>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <button
-            className={`btn ${isWartime ? 'btn-danger' : 'btn-secondary'}`}
-            style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
-            onClick={() => { setIsWartime(!isWartime); setIsGW(false) }}
-          >
-            {isWartime ? 'War' : 'Peace'}
-          </button>
-          {isWartime && (
+          {currentPowerId && (
             <button
-              className={`btn ${isGW ? 'btn-danger' : 'btn-secondary'}`}
+              className={`btn ${currentStatus !== 'peace' ? 'btn-danger' : 'btn-secondary'}`}
               style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
-              onClick={() => setIsGW(!isGW)}
+              onClick={() => cycleWarStatus(currentPowerId)}
             >
-              {isGW ? 'GW' : 'Ltd'}
+              {currentStatus === 'peace' ? 'Peace' : currentStatus === 'war' ? 'War' : 'GW'}
             </button>
           )}
           <button
