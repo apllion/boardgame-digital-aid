@@ -10,6 +10,10 @@ const ALLIANCES = [
   { label: 'Neutral', color: '#666' },
   { label: 'Triple Entente', color: '#1565c0' },
 ]
+const ASIA_SPACES = ['India', 'Bengal', 'Central Asia', 'Qajar Persia', 'Afghanistan', 'Balochistan', 'Qing China', 'Manchuria', 'Korea', 'Indochina', 'Siam', 'Dutch East Indies', 'Singapore', 'Burma']
+const AFRICA_SPACES = ['Morocco', 'Algeria', 'Tunis', 'Tripoli', 'Benghazi', 'Egypt', 'Sinai', 'Great Sand Sea', 'West Africa', 'East Africa', 'South Africa', 'Madagascar', 'Ethiopia', 'Sudan', 'Congo']
+const GERMAN_MINORS = ['Bavaria', 'Saxony', 'Hanover']
+const ITALIAN_MINORS = ['Sardinia-Piedmont', 'Kingdom of Two Sicilies']
 
 function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -95,6 +99,26 @@ export default function DiceOverlay({ onClose }) {
               items={ALLIANCES}
               onPick={(l, v) => addToHistory(l, v)}
               resultDisplay={(a) => a.label}
+            />
+            <RandomPicker
+              label="Asia"
+              items={ASIA_SPACES}
+              onPick={addToHistory}
+            />
+            <RandomPicker
+              label="Africa"
+              items={AFRICA_SPACES}
+              onPick={addToHistory}
+            />
+            <RandomPicker
+              label="German Minor"
+              items={GERMAN_MINORS}
+              onPick={addToHistory}
+            />
+            <RandomPicker
+              label="Italian Minor"
+              items={ITALIAN_MINORS}
+              onPick={addToHistory}
             />
             <RandomPicker
               label="Home Card"
