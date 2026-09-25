@@ -1,0 +1,427 @@
+[
+  {
+    "name": "Blob Fighter",
+    "faction": "Blob",
+    "type": "Ship",
+    "cost": 1,
+    "qty": 3,
+    "text": "Add 3 Combat Ally: Draw a card. <i>Either kill it before it signals the hive or run. There are other choices, but none you'll live through.</i>"
+  },
+  {
+    "name": "Battle Pod",
+    "faction": "Blob",
+    "type": "Ship",
+    "cost": 2,
+    "qty": 2,
+    "text": "Add 4 Combat You may scrap a card in the trade row. Ally: Add 2 Combat"
+  },
+  {
+    "name": "Trade Pod",
+    "faction": "Blob",
+    "type": "Ship",
+    "cost": 2,
+    "qty": 3,
+    "text": "Add 3 Trade Ally: Add 2 Combat <i>The loading and offloading process is efficient, but disgusting.</i>"
+  },
+  {
+    "name": "Blob Wheel",
+    "faction": "Blob",
+    "type": "Base",
+    "cost": 3,
+    "qty": 3,
+    "text": "Add 1 Combat Scrap: Add 3 Trade",
+    "defense": "5"
+  },
+  {
+    "name": "Ram",
+    "faction": "Blob",
+    "type": "Ship",
+    "cost": 3,
+    "qty": 2,
+    "text": "Add 5 Combat Ally: Add 2 Combat Scrap: Add 3 Trade"
+  },
+  {
+    "name": "Blob Destroyer",
+    "faction": "Blob",
+    "type": "Ship",
+    "cost": 4,
+    "qty": 2,
+    "text": "Add 6 Combat Ally: Destroy target base and/or scrap a card in the trade row. <i>When this monstrous ship shows up on a colony's sensors, they know the end is near...</i>"
+  },
+  {
+    "name": "The Hive",
+    "faction": "Blob",
+    "type": "Base",
+    "cost": 5,
+    "qty": 1,
+    "text": "Add 3 Combat Ally: Draw a card",
+    "defense": "5"
+  },
+  {
+    "name": "Battle Blob",
+    "faction": "Blob",
+    "type": "Ship",
+    "cost": 6,
+    "qty": 1,
+    "text": "Add 8 Combat Ally: Draw a card. Scrap: Add 4 Combat"
+  },
+  {
+    "name": "Blob Carrier",
+    "faction": "Blob",
+    "type": "Ship",
+    "cost": 6,
+    "qty": 1,
+    "text": "Add 7 Combat Ally: Acquire any ship without paying its cost and put it on top of your deck. <i>\"Is that... a whale?\"<br><b>- HMS Defender</b>, final transmission.</i>"
+  },
+  {
+    "name": "Mothership",
+    "faction": "Blob",
+    "type": "Ship",
+    "cost": 7,
+    "qty": 1,
+    "text": "Add 6 Combat Draw a card. Ally: Draw a card."
+  },
+  {
+    "name": "Blob World",
+    "faction": "Blob",
+    "type": "Base",
+    "cost": 8,
+    "qty": 1,
+    "text": "Add 5 Combat OR Draw a card for each Blob card that you've played this turn."
+  },
+  {
+    "name": "Trade Bot",
+    "faction": "Machine Cult",
+    "type": "Ship",
+    "cost": 1,
+    "qty": 3,
+    "text": "Add 1 Trade You may scrap a card in your hand or discard pile. Ally: Add 2 Combat"
+  },
+  {
+    "name": "Missile Bot",
+    "faction": "Machine Cult",
+    "type": "Ship",
+    "cost": 2,
+    "qty": 3,
+    "text": "Add 2 Combat You may scrap a card in your hand or discard pile. Ally: Add 2 Combat"
+  },
+  {
+    "name": "Battle Station",
+    "faction": "Machine Cult",
+    "type": "Base",
+    "cost": 3,
+    "qty": 2,
+    "text": "Scrap: Add 5 Combat",
+    "defense": "5 Outpost"
+  },
+  {
+    "name": "Supply Bot",
+    "faction": "Machine Cult",
+    "type": "Ship",
+    "cost": 3,
+    "qty": 3,
+    "text": "Add 2 Trade You may scrap a card in your hand or discard pile. Ally: Add 2 Combat"
+  },
+  {
+    "name": "Patrol Mech",
+    "faction": "Machine Cult",
+    "type": "Ship",
+    "cost": 4,
+    "qty": 2,
+    "text": "Add 3 Trade OR Add 5 Combat Ally: You may scrap a card in your hand or discard pile. <i>With the Blobs an ever present danger, even the cult's cargo carrying mechs bristle with firepower.</i>"
+  },
+  {
+    "name": "Stealth Needle",
+    "faction": "Machine Cult",
+    "type": "Ship",
+    "cost": 4,
+    "qty": 1,
+    "text": "Copy another ship you've played this turn. Stealth Needle has that ship's faction in addition to Machine Cult. <i>The Needle's ability to mimic other ships represents the pinnacle of Cult technology.</i>"
+  },
+  {
+    "name": "Battle Mech",
+    "faction": "Machine Cult",
+    "type": "Ship",
+    "cost": 5,
+    "qty": 1,
+    "text": "Add 4 Combat You may scrap a card in your hand or discard pile. Ally: Draw a card."
+  },
+  {
+    "name": "Mech World",
+    "faction": "Machine Cult",
+    "type": "Base",
+    "cost": 5,
+    "qty": 1,
+    "text": "Mech World counts as an ally for all factions. <i>The man-made planet is a galactic center for open source tech.</i>",
+    "defense": "6 Outpost"
+  },
+  {
+    "name": "Junkyard",
+    "faction": "Machine Cult",
+    "type": "Base",
+    "cost": 6,
+    "qty": 1,
+    "text": "Scrap a card in your hand or discard pile. <i>The machine Cult's first commandment: \"Thou shalt not waste tech.\"</i>",
+    "defense": "5 Outpost"
+  },
+  {
+    "name": "Missile Mech",
+    "faction": "Machine Cult",
+    "type": "Ship",
+    "cost": 6,
+    "qty": 1,
+    "text": "Add 6 Combat You may destroy target base. Ally: Draw a card"
+  },
+  {
+    "name": "Machine Base",
+    "faction": "Machine Cult",
+    "type": "Base",
+    "cost": 7,
+    "qty": 1,
+    "text": "Draw a card, then scrap a card from your hand. <i>This high-tech city is like a beehive: it looks chaotic but vital work is being done efficiently at a frenetic pace.</i>",
+    "defense": "6 Outpost"
+  },
+  {
+    "name": "Brain World",
+    "faction": "Machine Cult",
+    "type": "Base",
+    "cost": 8,
+    "qty": 1,
+    "text": "Scrap up to two cards from your hand and/or discard pile. Draw a card for each card scrapped this way. <i>The Machine Cult built these supercomputing space stations to run every aspect of their society. Now they worship them as gods.</i>",
+    "defense": "6 Outpost"
+  },
+  {
+    "name": "Imperial Fighter",
+    "faction": "Star Empire",
+    "type": "Ship",
+    "cost": 1,
+    "qty": 3,
+    "text": "Add 2 Combat Target opponent discards a card. Ally: Add 2 Combat"
+  },
+  {
+    "name": "Corvette",
+    "faction": "Star Empire",
+    "type": "Ship",
+    "cost": 2,
+    "qty": 2,
+    "text": "Add 1 Combat Draw a card. Ally: Add 2 Combat"
+  },
+  {
+    "name": "Imperial Frigate",
+    "faction": "Star Empire",
+    "type": "Ship",
+    "cost": 3,
+    "qty": 3,
+    "text": "Add 4 Combat Target opponent discards a card. Ally: Add 2 Combat Scrap: Draw a card"
+  },
+  {
+    "name": "Survey Ship",
+    "faction": "Star Empire",
+    "type": "Ship",
+    "cost": 3,
+    "qty": 3,
+    "text": "Add 1 Trade Draw a card. Scrap: Target opponent discards a card."
+  },
+  {
+    "name": "Recycling Station",
+    "faction": "Star Empire",
+    "type": "Base",
+    "cost": 4,
+    "qty": 2,
+    "text": "Add 1 Trade OR Discard up to two cards, then draw that many cards.",
+    "defense": "4 Outpost"
+  },
+  {
+    "name": "Space Station",
+    "faction": "Star Empire",
+    "type": "Base",
+    "cost": 4,
+    "qty": 2,
+    "text": "Add 2 Combat Ally: Add 2 Combat Scrap: Add 4 Trade",
+    "defense": "4 Outpost"
+  },
+  {
+    "name": "War World",
+    "faction": "Star Empire",
+    "type": "Base",
+    "cost": 5,
+    "qty": 1,
+    "text": "Add 3 Combat Ally: Add 4 Combat",
+    "defense": "4 Outpost"
+  },
+  {
+    "name": "Battlecruiser",
+    "faction": "Star Empire",
+    "type": "Ship",
+    "cost": 6,
+    "qty": 1,
+    "text": "Add 5 Combat Draw a card. Ally: Target opponent discards a card. Scrap: Draw a card. You may destroy target base."
+  },
+  {
+    "name": "Royal Redoubt",
+    "faction": "Star Empire",
+    "type": "Base",
+    "cost": 6,
+    "qty": 1,
+    "text": "Add 3 Combat Ally: Target opponent discards a card.",
+    "defense": "6 Outpost"
+  },
+  {
+    "name": "Dreadnaught",
+    "faction": "Star Empire",
+    "type": "Ship",
+    "cost": 7,
+    "qty": 1,
+    "text": "Add 7 Combat Draw a card. Scrap: Add 5 Combat"
+  },
+  {
+    "name": "Fleet HQ",
+    "faction": "Star Empire",
+    "type": "Base",
+    "cost": 8,
+    "qty": 1,
+    "text": "All of your ships get \"Add 1 Combat\" <i>When an imperial fleet goes into battle, it's usually coordinated from afar by one of these mobile command centers.</i>",
+    "defense": "8"
+  },
+  {
+    "name": "Federation Shuttle",
+    "faction": "Trade Federation",
+    "type": "Ship",
+    "cost": 1,
+    "qty": 3,
+    "text": "Add 2 Trade Ally: Add 4 Authority <i>\"Fast? This baby doesn't just haul cargo. She hauls...\"</i>"
+  },
+  {
+    "name": "Cutter",
+    "faction": "Trade Federation",
+    "type": "Ship",
+    "cost": 2,
+    "qty": 3,
+    "text": "Add 4 Authority Add 2 Trade Ally: Add 4 Combat <i>\"Built for cargo, armed for conflict. Versatility for an unpredictable universe.\"<br><b>- Premier Aerospace Cargo Enterprises</b></i>"
+  },
+  {
+    "name": "Embassy Yacht",
+    "faction": "Trade Federation",
+    "type": "Ship",
+    "cost": 3,
+    "qty": 2,
+    "text": "Add 3 Authority Add 2 Trade If you have two or more bases in play, draw two cards <i>War should always be a last resort, it's bad for the bottom line.</i>"
+  },
+  {
+    "name": "Trading Post",
+    "faction": "Trade Federation",
+    "type": "Base",
+    "cost": 3,
+    "qty": 2,
+    "text": "Add 1 Authority OR Add 1 Trade Scrap: Add 3 Combat",
+    "defense": "4 Outpost"
+  },
+  {
+    "name": "Barter World",
+    "faction": "Trade Federation",
+    "type": "Base",
+    "cost": 4,
+    "qty": 2,
+    "text": "Add 2 Authority OR Add 2 Trade Scrap: Add 5 Combat",
+    "defense": "4"
+  },
+  {
+    "name": "Freighter",
+    "faction": "Trade Federation",
+    "type": "Ship",
+    "cost": 4,
+    "qty": 2,
+    "text": "Add 4 Trade Ally: You may put the next ship you acquire this turn on top of your deck. <i>This class of mammoth cargo ships is one of the keys to the federation's vast trade-based wealth.</i>"
+  },
+  {
+    "name": "Defense Center",
+    "faction": "Trade Federation",
+    "type": "Base",
+    "cost": 5,
+    "qty": 1,
+    "text": "Add 3 Authority OR Add 2 Combat Ally: Add 2 Combat",
+    "defense": "5 Outpost"
+  },
+  {
+    "name": "Trade Escort",
+    "faction": "Trade Federation",
+    "type": "Ship",
+    "cost": 5,
+    "qty": 1,
+    "text": "Add 4 Authority Add 4 Combat Ally: Draw a card. <i>The heavily-armored Escort class was the Federation's first response to the Blob threat.</i>"
+  },
+  {
+    "name": "Flagship",
+    "faction": "Trade Federation",
+    "type": "Ship",
+    "cost": 6,
+    "qty": 1,
+    "text": "Add 5 Combat Draw a card. Ally: Add 5 Authority"
+  },
+  {
+    "name": "Port of Call",
+    "faction": "Trade Federation",
+    "type": "Base",
+    "cost": 6,
+    "qty": 1,
+    "text": "Add 3 Trade Scrap: Draw a card. You may destroy target base.",
+    "defense": "6 Outpost"
+  },
+  {
+    "name": "Central Office",
+    "faction": "Trade Federation",
+    "type": "Base",
+    "cost": 7,
+    "qty": 1,
+    "text": "Add 2 Trade You may put the next ship you acquire this turn on top of your deck. Ally: Draw a card.",
+    "defense": "6"
+  },
+  {
+    "name": "Command Ship",
+    "faction": "Trade Federation",
+    "type": "Ship",
+    "cost": 8,
+    "qty": 1,
+    "text": "Add 4 Authority Add 5 Combat Draw two cards. Ally: You may destroy target base."
+  },
+  {
+    "name": "Scout",
+    "faction": "Unaligned",
+    "type": "Ship",
+    "cost": 0,
+    "qty": 16,
+    "text": "Add 1 Trade"
+  },
+  {
+    "name": "Viper",
+    "faction": "Unaligned",
+    "type": "Ship",
+    "cost": 0,
+    "qty": 4,
+    "text": "Add 1 Combat"
+  },
+  {
+    "name": "Explorer",
+    "faction": "Unaligned",
+    "type": "Ship",
+    "cost": 2,
+    "qty": 10,
+    "text": "Add 2 Trade Scrap: Add 2 Combat"
+  },
+  {
+    "name": "1 Authority | 5 Authority",
+    "faction": "",
+    "type": "Score Card",
+    "cost": 0,
+    "qty": 12,
+    "text": "1 Authority | 5 Authority"
+  },
+  {
+    "name": "10 Authority | 20 Authority",
+    "faction": "",
+    "type": "Score Card",
+    "cost": 0,
+    "qty": 6,
+    "text": "10 Authority | 20 Authority"
+  }
+]

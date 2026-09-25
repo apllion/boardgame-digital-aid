@@ -33,7 +33,7 @@ export const SEQUENCE_OF_PLAY = [
     steps: [
       '(1) Militarism: gain 1 army step OR prevent 1 fort from degrading [20.1]',
       '(2) Degrade forts [20.2]',
-      '(3) Non-player power build step [20.3]',
+      '(3) Minor power build step [20.3]',
       '(4) All naval units go to port [20.4]',
       '(5) Set manpower [20.5]',
       '(6) Industrialize (auto-industrialization cards) [20.6]',
@@ -48,22 +48,26 @@ export const SEQUENCE_OF_PLAY = [
 ]
 
 export const PEACETIME_ACTIONS = [
-  { name: 'Recruitment', cost: '1-4 CP', detail: 'Standing army: 1 CP/step. Reserve army: 1 CP/step. Elite Corps: 2 CP. [12.2]' },
-  { name: 'Naval Movement', cost: '1 CP', detail: 'Move a squadron or dreadnought. [12.3]' },
-  { name: 'Construct Fleet', cost: '1-3 CP', detail: 'Build naval units (squadron or dreadnought). [12.4]' },
-  { name: 'Place Influence/Diplomacy', cost: '1 CP', detail: 'Place an influence or diplomacy marker. [12.5]' },
-  { name: 'Remove Influence/Diplomacy', cost: '1 CP', detail: 'Remove an opposing influence or diplomacy marker. [12.6]' },
-  { name: 'Influence Great Power (MPIT)', cost: '1-4 CP', detail: 'Place influence on Major Power Influence Track. [12.7]' },
-  { name: 'Minor Power Alliance', cost: '3 CP', detail: 'Gain an alliance with a minor power (must have diplomacy marker). [12.8]' },
-  { name: 'Remove Minor Power Alliance', cost: '4 CP', detail: 'Remove another player\'s minor power alliance. [12.9]' },
-  { name: 'Expeditionary Force', cost: '1-2 CP', detail: 'Build or move an expeditionary force. [12.10]' },
-  { name: 'Pacification', cost: '1 CP', detail: 'Attempt to pacify a space with a pacification marker. [12.11]' },
-  { name: 'Construct Fort', cost: '1-2 CP', detail: 'Build or upgrade a fort. [12.12]' },
-  { name: 'CP Chain', cost: '1 Card', detail: 'Play an additional card for its CP value. [12.13]' },
-  { name: 'Industrialize', cost: '1 Card', detail: 'Play a card into industrialization. [12.14]' },
-  { name: 'Redeployment', cost: '1 CP', detail: 'Move armies through controlled spaces. [12.15]' },
-  { name: 'Land Battle (rebels)', cost: '1 CP', detail: 'Attack rebels in peacetime. [12.16]' },
-  { name: 'Declare War', cost: '1-4 CP', detail: 'Declare war on another power. [13.0]' },
+  { name: 'Recruitment', cost: '1-4 CP', detail: '', items: [
+    'Standing/Reserve Army: 1 CP/step',
+    'Elite Corps: 2 CP',
+  ] },
+  { name: 'Naval Movement', cost: '1 CP', detail: 'Move all fleets and 1 army. [12.3]' },
+  { name: 'Construct Fleet', cost: '1-3 CP', detail: 'Ready squadron: 2 CP. Spent squadron: 1 CP. Ready dreadnought: 3 CP. Spent dreadnought: 2 CP. Refit: 1 CP. [12.4]' },
+  { name: 'Rebel Suppression', cost: '1 CP', detail: 'Launch an attack (rebels). [12.5]' },
+  { name: 'Trade/Diplomacy', cost: '1 CP', detail: 'Place influence or diplomacy marker. [12.6]' },
+  { name: 'Redeployment', cost: '1 CP', detail: 'Armies and ECs use rail/sea redeployment. Elite Colonial EFs and ECs may move unlimited distance via redeployment if they end in a non-European space with no army. [12.7]' },
+  { name: 'Remove Influence/Diplomacy', cost: '1 CP', detail: 'Remove opposing influence or diplomacy marker. May remove influence in Africa after Berlin Conference if \u22653 impulses remain. [12.8]' },
+  { name: 'Minor Power Alliance', cost: '3 CP', detail: 'Gain an alliance with a minor power (must have diplomacy). [12.9]' },
+  { name: 'Remove Minor Power Alliance', cost: '4 CP', detail: 'Remove another player\'s minor power alliance. 1 CP to set up diplomacy in its place. [12.10]' },
+  { name: 'Major Power Influence Track', cost: '1-4 CP', detail: 'Add influence to the Major Power Influence Track equal to CP spent. [12.11]' },
+  { name: 'Expeditionary Force', cost: '1 CP', detail: '1 CP to build a new EF. 1 CP to move an EF an unlimited distance via friendly naval base/port chain. [12.12]' },
+  { name: 'Pacification', cost: '1 CP', detail: '1 CP (GE: 2 CP if not unified). AU always 2 CP. Roll two dice, \u226510 is a success. [12.13]' },
+  { name: 'Construct Fort', cost: '1 CP', detail: 'Max 3 forts per player; a fort can be upgraded for 1 CP (max to level 3). [12.14]' },
+  { name: 'Land Battle', cost: '1 CP', detail: 'Launch an attack (rebels). [12.15]' },
+  { name: 'Declare War', cost: '1-4 CP (see wartime actions)', detail: 'Declare war on another power. [13.0]' },
+  { name: 'CP Chain', cost: '1 Card', detail: 'Play a card for its CP value. Cannot use CP Chain to industrialize. [12.1]' },
+  { name: 'Industrialize', cost: '1 Card', detail: 'Once per turn. 1 CP spent adds DRM to industrialization roll. Cannot use CP Chain to industrialize. [12.1]' },
 ]
 
 export const WARTIME_ACTIONS = [
@@ -181,13 +185,13 @@ export const WAR_AIMS = {
     },
     {
       name: 'Unification',
-      detail: 'Target up to two spaces containing the unifier\'s nationality. No WTT increase, no stability loss. [13.2]',
+      detail: 'Target up to two spaces containing the unifier\'s nationality or citizenship (for AU). No WTT increase, no stability loss. [13.2]',
       who: 'GE: German unification spaces. AU: spaces with nationalities that have AU citizenship. Any player with diplomacy/ally on Sardinia-Piedmont or Two Sicilies: Italian unification. [13.2, 13.2.1]',
       cannot: 'Target must contain the relevant nationality.',
     },
     {
       name: 'Conquest',
-      detail: 'Target up to two spaces, max 1 key. Cannot target capitals/subcapitals. +1 WTT, lose stability = WTT after increase. [13.3]',
+      detail: 'Target up to two spaces, only one of which can be a key. Increase WTT by one, decrease stability by WTT. [13.3]',
       who: 'Any player. Required when target doesn\'t qualify for Liberation or Unification.',
       cannot: 'Cannot target capitals or subcapitals. [13.3.1]',
     },
@@ -316,5 +320,226 @@ export const NATIONAL_CHARACTERISTICS = {
     'Defensive posture - protect home spaces',
     'Industrial challenge - needs help to industrialize [33.6]',
     'Egypt is strategically critical',
+  ],
+}
+
+// Hand Size determinants
+export const HAND_SIZE = [
+  'Industry level',
+  'Flashpoints',
+  '+/- card markers',
+  'Stability level',
+  'National Characteristics',
+  'Minimum card draw',
+]
+
+// Action Phase Breakdown [12.0]
+export const ACTION_PHASE_BREAKDOWN = [
+  'In turn order, players either play an action card or pass.',
+  'Play an action card: play for CP to conduct actions, or play for its event.',
+  'Exception: mandatory events are played for both their event and CP.',
+  'Pass: players can pass if they have only one card remaining and they\'ve played their home card.',
+  'Players cannot pass if they have a mandatory event card.',
+  'UK may pass with 2 cards remaining.',
+  'There is no "hard passing", meaning players can still play their one remaining card on a future impulse.',
+  'Ending the action phase: the action phase ends when either (1) all players consecutively pass or (2) when all players have no remaining cards.',
+]
+
+// Stacking Rules [5.3]
+export const STACKING_RULES = [
+  { region: 'Europe', limit: '3 armies' },
+  { region: 'Africa/Asia', limit: '2 armies' },
+  { region: 'Naval base', limit: 'Unlimited' },
+  { region: 'Ports', limit: '4 naval units' },
+]
+
+// Alliance Resolution Step [8.6]
+export const ALLIANCE_RESOLUTION = [
+  'The track that has the most influence is resolved first. [8.6]',
+  'If two factions have the same amount of influence, resolve them simultaneously. [8.6]',
+  'A win is ordered for every marker on the power\'s influence track that is \u2265 2. 1 influence is added as a DRM. If the result is a tie, the resolving player breaks the tie. [8.6]',
+  'When an alliance is created, place its current position on "1" space of the MPT. [8.6]',
+  'Check for FR Second Republic before resolving. [8.6]',
+]
+
+// Italy Unified? / Berlin Conference (aid2 text boxes)
+export const SPECIAL_EVENTS = [
+  {
+    name: 'Italy Unified?',
+    detail: 'After the unification die roll succeeds, the influence on the MPIT is set.',
+  },
+  {
+    name: 'Berlin Conference',
+    detail: 'Players cannot place diplomacy or sell territory in China or Egypt. Fishing in Europe or a war of conquest places the Congo on any EP still owned by the Congo. The player who controls the most African territory gains a +½ card marker regardless of the card economy.',
+  },
+]
+
+// Flashpoints and Power Projection
+export const FLASHPOINTS = {
+  list: [
+    { key: 'a', name: 'Balkans' },
+    { key: 'b', name: 'Central Europe' },
+    { key: 'c', name: 'Lowlands' },
+    { key: 'd', name: 'China' },
+    { key: 'e', name: 'Italy' },
+    { key: 'f', name: 'Great Game' },
+    { key: 'g', name: 'Germany' },
+    { key: 'h', name: 'Africa' },
+    { key: 'i', name: 'Caucasus' },
+  ],
+  powerProjection: [
+    'Players can gain a maximum of two power projections per year.',
+    '+1 power projection for controlling a port space adjacent to a naval box.',
+    '+2 power projections for controlling a port space (either a key or terra key) and a naval base adjacent to a naval box.',
+    'Players can only gain power projection from a maximum of four European waters naval boxes.',
+    'A player\'s power projection can\'t be greater than the number of naval units they control multiplied by two.',
+    'Naval box icon: +1 power projection (ship icon), +2 power projection (anchor icon).',
+  ],
+}
+
+// Flashpoint Summary
+export const FLASHPOINT_SUMMARY = [
+  { name: 'Germany', condition: 'Control 8 keys', reward: '+1 card' },
+  { name: 'Italy', condition: 'Control 4 keys', reward: '+1 card' },
+  { name: 'Low Countries', condition: 'Control 3 keys', reward: '+\u00BD card' },
+  { name: 'Balkans', condition: 'Control most keys', reward: '+\u00BD card' },
+  { name: 'Africa', condition: 'Control most keys (min. 5)', reward: '+1 card' },
+  { name: 'Great Game', condition: 'Control 3 keys', reward: 'No card' },
+  { name: 'China', condition: 'Control 3 keys', reward: '+1 card' },
+  { name: 'Central Europe', condition: 'Control 3 keys', reward: '+\u00BD card' },
+  { name: 'Caucasus', condition: 'Control 5 spaces', reward: '+1 Industrialization DRM' },
+  { name: 'Power Projection', condition: '-', reward: '+1 Industrialization DRM' },
+  { name: 'Suez Canal', condition: 'If built, control Egypt', reward: '+\u00BD card' },
+]
+
+// Italy Mandatory Event [22.0]
+export const ITALY_EVENT = {
+  table: [
+    { roll: 1, result: 'A Lost Cause', detail: 'Remove the Italy Card from the game.' },
+    { roll: 2, result: 'Petition for Aid', detail: 'Italian state petitions foreign power for aid.' },
+    { roll: 3, result: 'Internal Italian War', detail: 'Internal Italian War.' },
+    { roll: 4, result: 'Internal Italian War', detail: 'Internal Italian War.' },
+    { roll: 5, result: 'Internal Italian War', detail: 'Internal Italian War.' },
+    { roll: 6, result: 'Nationalist Wave', detail: 'Nationalist wave.' },
+  ],
+  drms: [
+    '+2 if there are no player controlled spaces in Italy.',
+    '+1 per key controlled by the Italian minor power with the 2nd most influence.',
+    'The player who dominates Italy controls the Flashpoint and may apply the DRM.',
+  ],
+  results: {
+    petitionForAid: 'If Sardinia-Piedmont or the Kingdom of the Two Sicilies are allied with a player that controls an Italian unification space, the active player places that player\'s alliance marker on Italy. Otherwise the active player gains control of the Italian card. They then take control of Piedmont and Sardinia (if not already there). A player gains one EF in Italy if they gained the +1 card marker.',
+    internalItalianWar: 'Choose either Sardinia-Piedmont or the Kingdom of the Two Sicilies. That power gains 1 army, 1 naval squadron, and takes control of a neighboring Italian key that is not controlled by a player (there will only ever be 1 each). Eliminate all minor power armies in the conquered space. If Sardinia-Piedmont or the Kingdom of the Two Sicilies now controls 3 or more Italian keys, roll for Italian Unification.',
+    nationalistWave: 'Choose either Sardinia-Piedmont or the Kingdom of the Two Sicilies. That power gains 1 army, takes control of all Italian key spaces that are not controlled by a player. The active player chooses which of those spaces the army is placed in.',
+  },
+  unificationDieRoll: 'Roll a d6. On a result \u2265 7, Italy immediately unifies. Add the following modifiers: +2 if there are no player controlled spaces in Italy, +1 per key controlled by the Italian minor power with the 2nd most influence. If the result < 7, Italy does not unify. End this procedure.',
+}
+
+// Kingdom of Italy Table
+export const KINGDOM_OF_ITALY = {
+  table: [
+    { roll: '1', result: 'The King Vacillates: Italy gains 2 neutral influences on MPT.' },
+    { roll: '2', result: 'The active player places an Italian control marker on an uncontrolled Italian key.' },
+    { roll: '3', result: 'Italy permanently gains an additional reserve army.' },
+    { roll: '4', result: 'Italy permanently gains an additional reserve army.' },
+    { roll: '5', result: 'Italy permanently gains an additional reserve army, and the active player places an Italian control marker on an uncontrolled Italian key.' },
+  ],
+  warsOfUnification: 'Italy begins with diplomacy or an alliance with either Sardinia-Piedmont or the Kingdom of the Two Sicilies acting as a precursor to a war for Italian unification. First, the attacking player must declare which Italian state they will give the Kingdom to (this must be either Sardinia-Piedmont/Kingdom of the Two Sicilies), then the attacking player gives all power (if they do not already have some) to that faction.',
+  redeployment: 'Italian standing armies are placed in spaces that are adjacent to Rome in the Italian peninsula. The standing army is placed with an Italian army in each space. Italian naval units are always placed in Naples if possible. Piedmont is not considered in Italian redeployment.',
+}
+
+// Card Icons Legend
+export const CARD_ICONS = [
+  { icon: 'Draw a card', detail: 'Draw a card' },
+  { icon: 'March', detail: 'March x areas' },
+  { icon: 'Attack', detail: 'Attack connection' },
+  { icon: 'M (Mandatory)', detail: 'Mandatory event' },
+  { icon: 'Response', detail: 'Remove after play' },
+  { icon: 'Turn entry', detail: 'Turn entry indicator' },
+  { icon: 'National Goal', detail: 'National Goal marker' },
+  { icon: 'Combat', detail: 'Combat indicator' },
+  { icon: 'Bot Box', detail: 'Bot Box indicator' },
+  { icon: 'CP Value', detail: 'Number (e.g. 3) = CP Value' },
+]
+
+// GW National Will Step [25.6]
+export const GW_NATIONAL_WILL = [
+  { vps: '0-2', bonus: 'No bonus' },
+  { vps: '3-4', bonus: '1 EC' },
+  { vps: '5-6', bonus: '1 EC and 1 display track boost' },
+  { vps: '7-8', bonus: '1 EC and 2 display track boosts' },
+  { vps: '9-10', bonus: '1 EC and 3 display track boosts' },
+]
+
+// GW Stability Table
+export const GW_STABILITY_TABLE = {
+  gwCauses: [
+    { cause: 'Losing a territorial key on the main map or losing a home key in Asia or Africa', effect: '-1' },
+    { cause: 'Recapturing one of the above keys', effect: '+1 (reversal)' },
+    { cause: 'Decisive defeat, only if the defeated force contained at least 2 units (including naval)', effect: '-1' },
+    { cause: 'Losing a Dreadnought', effect: '-1' },
+    { cause: 'Certain Colonial War results for UK and RU', effect: '-1' },
+  ],
+  preGwCauses: [
+    { cause: 'A space gains independence through a WoI', effect: '-1' },
+    { cause: 'Declaring a war of conquest', effect: '-X' },
+    { cause: 'Major victory in a war', effect: '+1' },
+    { cause: 'Losing a Dreadnought', effect: '-1' },
+  ],
+}
+
+// GW Sequence of Play
+export const GW_SOP = [
+  {
+    phase: 'Outreach Step',
+    steps: [
+      '(1) Discard all cards',
+      '(2) Form alliances',
+      '(3) Place 1 influence in neutral box',
+      '(4) Resolve and form new alliances',
+      '(5) Place additional influence and set up diplomacy',
+      '(6) Set the GW turn order',
+    ],
+  },
+  {
+    phase: 'Planning Step',
+    steps: [
+      '(1) Draw GW card',
+      '(2) Flip facedown GW combat cards',
+      '(3) War Budget (industry\'s war contribution)',
+      '(4) Home Card Bonus',
+      '(5) Play a CP card in a battle',
+    ],
+  },
+  {
+    phase: 'Maneuver Step',
+    steps: [
+      'In GW turn, players conduct 1 CP action.',
+    ],
+  },
+  {
+    phase: 'Action Step',
+    steps: [
+      '(1) Check for Blockade (IS blockades)',
+      '(2) The Colonial War',
+      '(3) Neutrals may join or give 1 CP to another player',
+      '(4) Go back to Planning Step',
+    ],
+  },
+]
+
+// Trenches [28.1]
+export const TRENCHES = {
+  rules: [
+    'Beginning with the first year of the GW (GW turn 1, there is a GW turn 0), all keys automatically have trenches. [28.1]',
+    'The attacking player must have a full strength army in their main attack force in order to attack a trench. [28.1]',
+    'The attacker automatically takes an additional loss when attacking a trench space. [28.1]',
+    'Causing a retreat in a trench space changes the status of the trench battle. [28.1]',
+    'Keep track of the original attacker and the original defender in each trench battle as the "attacker" in a given battle is not always the original attacker. [28.1]',
+  ],
+  statuses: [
+    { status: 'Trench', detail: 'Default status' },
+    { status: 'Breakthrough', detail: 'After causing a retreat' },
+    { status: 'Deadlock', detail: 'Stalemate condition' },
   ],
 }

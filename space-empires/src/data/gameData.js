@@ -1,0 +1,77 @@
+export const SHIPS = [
+  { id: 'SC', name: 'Scout', cost: 6, class: 'E', attack: 3, defense: 0, hull: 1, maintenance: 1, desc: 'Point Defense: VS. Fighters is A6 at PD1, A7 at PD2, A8 at PD3' },
+  { id: 'DD', name: 'Destroyer', cost: 9, class: 'D', attack: 4, defense: 0, hull: 1, maintenance: 1, prereq: 'Ship Size 2', desc: 'Scanner: Detect cloaked ships. Scanner 2 detects Cloak 2.' },
+  { id: 'CA', name: 'Cruiser', cost: 12, class: 'C', attack: 4, defense: 1, hull: 2, maintenance: 1, prereq: 'Ship Size 3', desc: 'Exploration: May peek at then reveal adjacent unexplored system.' },
+  { id: 'BC', name: 'Battlecruiser', cost: 15, class: 'B', attack: 5, defense: 1, hull: 2, maintenance: 1, prereq: 'Ship Size 4' },
+  { id: 'BB', name: 'Battleship', cost: 20, class: 'A', attack: 5, defense: 2, hull: 3, maintenance: 1, prereq: 'Ship Size 5' },
+  { id: 'DN', name: 'Dreadnaught', cost: 24, class: 'A', attack: 6, defense: 3, hull: 3, maintenance: 1, prereq: 'Ship Size 6' },
+  { id: 'CV', name: 'Carrier', cost: 12, class: 'E', attack: 3, defense: 0, hull: 1, maintenance: 1, prereq: 'Fighters 1', desc: "Cargo: 3 fighters max. Can't be targeted until all fighters destroyed." },
+  { id: 'F', name: 'Fighter Sqd', cost: 5, class: 'B', attack: 5, defense: 0, hull: 1, maintenance: 1, desc: 'Fighter 2: B6, Fighter 3: B7 and Def +1. Cannot move without CV.' },
+  { id: 'R', name: 'Raider', cost: 12, class: 'A/D', attack: '4/5', defense: 0, hull: 2, maintenance: 1, prereq: 'Cloaking 1', desc: 'Cloaking: If NO enemy scanners: Attack A4 (A5 with Cloak 2). +1 attack first round. May retreat before firing. May move through enemy territory.' },
+  { id: 'SW', name: 'Mine Sweeper', cost: 6, class: 'E', attack: 1, defense: 0, hull: 1, maintenance: 1, prereq: 'Mine Sweep 1', desc: 'Each removes 1 mine before combat (2 at level 2).' },
+  { id: 'BASE', name: 'Base', cost: 12, class: 'A', attack: 7, defense: 2, hull: 3, maintenance: 0, prereq: 'Ship Size 2', desc: 'Auto-upgrades. Cannot move. Only 1/system. No SY required.' },
+  { id: 'SY', name: 'Ship Yard', cost: 6, class: 'C', attack: 3, defense: 0, hull: 1, maintenance: 0, desc: 'Auto-upgrades. Place on world that produced CP. Cannot move. 1/planet/econ phase.' },
+  { id: 'COL', name: 'Colony Ship', cost: 8, noncombat: true, desc: 'Colonizes planets. Move 1. Noncombat ship.' },
+  { id: 'MS', name: 'Mining Ship', cost: 5, noncombat: true, desc: 'Tows Mineral and Ship Wrecks. Move 1. Noncombat ship.' },
+  { id: 'MSP', name: 'MS Pipeline', cost: 3, noncombat: true, desc: 'Merchant ship: 1CP per total connected colonies. Move 1. Noncombat ship.' },
+  { id: 'MINE', name: 'Mines', cost: 5, noncombat: true, prereq: 'Mines', desc: 'After Mine Sweepers, may destroy 1 ship. Move 1. No attack value.' },
+  { id: 'DECOY', name: 'Decoy', cost: 1, noncombat: true, desc: 'Auto-moves at Move tech level. Noncombat. No SY required.' },
+];
+
+export const TECHNOLOGIES = [
+  { category: 'Ship Size', techs: [
+    { id: 'ss2', name: 'Ship Size 2', cost: 10, desc: 'Build Destroyers' },
+    { id: 'ss3', name: 'Ship Size 3', cost: 15, prereq: 'ss2', desc: 'Build Cruisers' },
+    { id: 'ss4', name: 'Ship Size 4', cost: 20, prereq: 'ss3', desc: 'Build Battlecruisers' },
+    { id: 'ss5', name: 'Ship Size 5', cost: 25, prereq: 'ss4', desc: 'Build Battleships' },
+    { id: 'ss6', name: 'Ship Size 6', cost: 30, prereq: 'ss5', desc: 'Build Dreadnaughts' },
+  ]},
+  { category: 'Attack', techs: [
+    { id: 'atk1', name: 'Attack 1', cost: 20, desc: '+1 to Ship Attack' },
+    { id: 'atk2', name: 'Attack 2', cost: 30, prereq: 'atk1', desc: '+1 to Ship Attack. Limited by hull size.' },
+    { id: 'atk3', name: 'Attack 3', cost: 40, prereq: 'atk2', desc: '+1 to Ship Attack. Limited by hull size.' },
+  ]},
+  { category: 'Defense', techs: [
+    { id: 'def1', name: 'Defense 1', cost: 20, desc: '+1 to Ship Defense' },
+    { id: 'def2', name: 'Defense 2', cost: 30, prereq: 'def1', desc: '+1 to Ship Defense. Limited by hull size.' },
+    { id: 'def3', name: 'Defense 3', cost: 40, prereq: 'def2', desc: '+1 to Ship Defense. Limited by hull size.' },
+  ]},
+  { category: 'Tactics', techs: [
+    { id: 'tac1', name: 'Tactics 1', cost: 15, desc: '+1 to Ship Tactics. Higher Tactics fires first within same Class.' },
+    { id: 'tac2', name: 'Tactics 2', cost: 20, prereq: 'tac1', desc: '+1 to Ship Tactics.' },
+    { id: 'tac3', name: 'Tactics 3', cost: 30, prereq: 'tac2', desc: '+1 to Ship Tactics.' },
+  ]},
+  { category: 'Movement', techs: [
+    { id: 'mov2', name: 'Move 2', cost: 20, desc: 'Move 1/1/2 hexes per movement turn.' },
+    { id: 'mov3', name: 'Move 3', cost: 30, prereq: 'mov2', desc: 'Move 1/2/2 hexes per movement turn.' },
+    { id: 'mov4', name: 'Move 4', cost: 40, prereq: 'mov3', desc: 'Move 2/2/2 hexes per movement turn.' },
+    { id: 'mov5', name: 'Move 5', cost: 40, prereq: 'mov4', desc: 'Move 2/2/3 hexes per movement turn.' },
+    { id: 'mov6', name: 'Move 6', cost: 40, prereq: 'mov5', desc: 'Move 2/3/3 hexes per movement turn.' },
+  ]},
+  { category: 'Other', techs: [
+    { id: 'terraform', name: 'Terraform', cost: 25, desc: 'May colonize Barren planets.' },
+    { id: 'exploration', name: 'Exploration', cost: 15, desc: 'Carriers may flip adjacent unexplored system before moving.' },
+    { id: 'sy2', name: 'Ship Yards 2', cost: 20, desc: 'Build 1.5 Hull points per SY (rounded down).' },
+    { id: 'sy3', name: 'Ship Yards 3', cost: 30, prereq: 'sy2', desc: 'Build 2 Hull points per SY (rounded down).' },
+    { id: 'fight1', name: 'Fighters 1', cost: 25, desc: 'Build Carriers and Fighter Squad 1.' },
+    { id: 'fight2', name: 'Fighters 2', cost: 30, prereq: 'fight1', desc: 'Build Fighter Squad 2.' },
+    { id: 'fight3', name: 'Fighters 3', cost: 40, prereq: 'fight2', desc: 'Build Fighter Squad 3.' },
+    { id: 'pd1', name: 'Point Def 1', cost: 20, desc: 'Scouts are A6 vs Fighters.' },
+    { id: 'pd2', name: 'Point Def 2', cost: 25, prereq: 'pd1', desc: 'Scouts are A7 vs Fighters.' },
+    { id: 'pd3', name: 'Point Def 3', cost: 30, prereq: 'pd2', desc: 'Scouts are A8 vs Fighters.' },
+    { id: 'cloak1', name: 'Cloaking 1', cost: 30, desc: 'Build Raiders.' },
+    { id: 'cloak2', name: 'Cloaking 2', cost: 40, prereq: 'cloak1', desc: 'Enemy DD need Scanner 2 to detect. Raiders +1 Attack.' },
+    { id: 'scan1', name: 'Scanner 1', cost: 20, desc: 'DD detect enemy Raiders with Cloaking 1.' },
+    { id: 'scan2', name: 'Scanner 2', cost: 30, prereq: 'scan1', desc: 'DD detect enemy Raiders with Cloaking 2.' },
+    { id: 'mines', name: 'Mines', cost: 20, desc: 'Build Mines.' },
+    { id: 'msw1', name: 'Mine Sweep 1', cost: 10, desc: 'Build Mine Sweepers. Each removes 1 mine.' },
+    { id: 'msw2', name: 'Mine Sweep 2', cost: 20, prereq: 'msw1', desc: 'Mine Sweepers remove 2 mines each.' },
+  ]},
+];
+
+export const ECON_SEQUENCE = [
+  'Calculate Income',
+  'Purchase Units/Tech',
+  'Place Units',
+  'Grow Colonies',
+];

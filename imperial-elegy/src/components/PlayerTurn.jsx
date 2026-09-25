@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useGameContext } from '@shared/game-tree'
 import { POWERS } from '../data/botRules'
 import { HOME_CARDS, NATIONAL_CHARACTERISTICS, MINOR_POWER_ALLIANCES, MINOR_POWER_NOTES } from '../data/playerAid'
-import { ActionsView, CombatView, WarAimsView, TrickyRulesMenu, TrickyRuleView } from './AidViews'
+import { ActionsView, CombatView, WarAimsView, StackingView, FlashpointsView, ItalyView, CardIconsView, GWRulesView, TrickyRulesMenu, TrickyRuleView } from './AidViews'
 
 function useSubView() {
   const [stack, setStack] = useState([])
@@ -134,6 +134,29 @@ export default function PlayerTurn({ powerId }) {
           })}
         />
         <MenuItem
+          title="Stacking & Alliances"
+          onClick={() => subView.push({
+            title: 'Stacking & Alliances',
+            render: () => <StackingView />,
+          })}
+        />
+        <MenuItem
+          title="Flashpoints & Projection"
+          borderColor="#d4a017"
+          onClick={() => subView.push({
+            title: 'Flashpoints & Projection',
+            render: () => <FlashpointsView />,
+          })}
+        />
+        <MenuItem
+          title="Italy"
+          borderColor="#27ae60"
+          onClick={() => subView.push({
+            title: 'Italy',
+            render: () => <ItalyView />,
+          })}
+        />
+        <MenuItem
           title="Minor Power Alliances"
           onClick={() => subView.push({
             title: 'Minor Power Alliances',
@@ -153,6 +176,21 @@ export default function PlayerTurn({ powerId }) {
           onClick={() => subView.push({
             title: 'National Characteristics',
             render: () => <NationalTraitsView powerId={powerId} />,
+          })}
+        />
+        <MenuItem
+          title="Card Icons"
+          onClick={() => subView.push({
+            title: 'Card Icons',
+            render: () => <CardIconsView />,
+          })}
+        />
+        <MenuItem
+          title="GW Rules"
+          borderColor="#c0392b"
+          onClick={() => subView.push({
+            title: 'GW Rules',
+            render: () => <GWRulesView />,
           })}
         />
         <MenuItem

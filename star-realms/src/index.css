@@ -1,0 +1,410 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  min-height: 100vh;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#root {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Setup screen */
+.setup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.setup h1 {
+  font-size: 1.6rem;
+  letter-spacing: 0.05em;
+}
+
+.setup .subtitle {
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: -1rem;
+}
+
+.player-count {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.player-count button {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #444;
+  border-radius: 8px;
+  background: #252540;
+  color: #e0e0e0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.player-count button:hover {
+  background: #333355;
+}
+
+.player-count button.active {
+  border-color: #4a90d9;
+  background: #2a3a6a;
+  box-shadow: 0 0 12px rgba(74, 144, 217, 0.3);
+}
+
+.start-btn {
+  padding: 0.75rem 3rem;
+  border: none;
+  border-radius: 8px;
+  background: #4a90d9;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.start-btn:hover {
+  background: #5aa0e9;
+  transform: translateY(-1px);
+}
+
+.start-btn:active {
+  transform: scale(0.97);
+}
+
+/* Counter layout */
+.counter-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.players-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.player-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 0;
+}
+
+.player-panel:not(:last-child) {
+  border-bottom: 1px solid #333;
+}
+
+.player-panel.rotated {
+  transform: rotate(180deg);
+}
+
+.player-name {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+}
+
+.player-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0 0.75rem;
+}
+
+.authority-value {
+  font-size: clamp(3rem, 12vw, 5rem);
+  font-weight: 800;
+  text-align: center;
+  flex: 1;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.authority-value.low {
+  color: #e57373;
+}
+
+.authority-value.critical {
+  color: #ef5350;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Buttons */
+.adjust-btn {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #444;
+  border-radius: 12px;
+  background: #252540;
+  color: #e0e0e0;
+  font-size: 2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adjust-btn:hover {
+  background: #333355;
+}
+
+.adjust-btn:active {
+  transform: scale(0.93);
+  background: #3a3a6a;
+}
+
+.adjust-btn.plus {
+  border-color: #2e7d32;
+  color: #66bb6a;
+}
+
+.adjust-btn.plus:active {
+  background: #1b5e20;
+}
+
+.adjust-btn.minus {
+  border-color: #c62828;
+  color: #ef5350;
+}
+
+.adjust-btn.minus:active {
+  background: #b71c1c;
+}
+
+/* Bottom toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.5rem;
+  background: #252540;
+  flex-wrap: wrap;
+  border-top: 1px solid #333;
+  flex-shrink: 0;
+}
+
+.toolbar button {
+  padding: 0.65rem 1.1rem;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: transparent;
+  color: #aaa;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 44px;
+}
+
+.toolbar button:hover {
+  background: #333355;
+  color: #e0e0e0;
+}
+
+.toolbar .reset-btn:hover {
+  background: #c62828;
+  border-color: #c62828;
+  color: #fff;
+}
+
+/* History overlay */
+.history-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.history-panel {
+  background: #252540;
+  border-radius: 12px 12px 0 0;
+  padding: 1rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.history-panel h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.history-panel .close-btn {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: transparent;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.history-entry {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid #333;
+  font-size: 0.8rem;
+}
+
+.history-entry .player {
+  font-weight: 600;
+}
+
+.history-entry .delta.positive {
+  color: #66bb6a;
+}
+
+.history-entry .delta.negative {
+  color: #ef5350;
+}
+
+.history-entry .result {
+  color: #888;
+  min-width: 40px;
+  text-align: right;
+}
+
+.history-empty {
+  color: #666;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+/* Dictionary overlay */
+.dict-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.dict-panel {
+  background: #252540;
+  border-radius: 12px 12px 0 0;
+  padding: 1rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dict-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.dict-header h3 {
+  font-size: 0.95rem;
+}
+
+.dict-header .close-btn {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: transparent;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.dict-search {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+.dict-search:focus {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+.dict-list {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.dict-entry {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.dict-en {
+  font-size: 0.8rem;
+  color: #ccc;
+  margin-bottom: 0.2rem;
+}
+
+.dict-de {
+  font-size: 0.85rem;
+  color: #4a90d9;
+  font-weight: 600;
+}
+
+.dict-empty {
+  color: #666;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem 0;
+}
