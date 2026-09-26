@@ -99,6 +99,7 @@ export default function App() {
   const [umpireMode, setUmpireMode] = useState(false);
   const [pendingReset, setPendingReset] = useState(null);
   const [showGameMgr, setShowGameMgr] = useState(false);
+  const [saves, setSaves] = useState(() => loadSaves());
 
   const { phase, turn: currentTurn, startingCP = 0, econData, techPurchases, fleet, upgrades = [] } = game;
   const isSetup = phase === 'setup';
@@ -117,6 +118,17 @@ export default function App() {
     setGame(prev => {
       const newTurn = typeof fn === 'function' ? fn(prev.turn) : fn;
       if (newTurn <= prev.turn) return { ...prev, turn: newTurn };
+      // Auto-save before advancing (keep max 2)
+      const autoName = `Turn ${prev.turn} auto`;
+      const currentSaves = loadSaves();
+      const entry = { ...prev, name: autoName, savedAt: Date.now() };
+      const idx = currentSaves.findIndex(s => s.name === autoName);
+      if (idx >= 0) currentSaves[idx] = entry; else currentSaves.push(entry);
+      const autos = currentSaves.filter(s => s.name.endsWith(' auto')).sort((a, b) => b.savedAt - a.savedAt);
+      const stale = new Set(autos.slice(2).map(s => s.name));
+      const trimmed = currentSaves.filter(s => !stale.has(s.name));
+      saveSaves(trimmed);
+      setSaves(trimmed);
       // Advancing turn: freeze all null-snapshot ships with current tech
       const owned = new Set();
       for (const [techId, t] of Object.entries(prev.techPurchases)) {
@@ -175,18 +187,31 @@ export default function App() {
   // Remaining CP before upgrades (for upgrade affordability check)
   const carryOver = calcTurnRemaining(econData, techPurchases, fleet, upgrades, currentTurn - 1, startingCP);
   const turnData = econData[currentTurn] || {};
-  const subtotal = carryOver + (turnData.colony ?? 0) + (turnData.mineral ?? 0) + (turnData.pipeline ?? 0) - (turnData.bid ?? 0);
+  const subtotal = carryOver + (turnData.colony ?? 0) + (turnData.mineral ?? 0) + (turnData.pipeline ?? 0);
   const maintenanceCost = fleet.filter(g => {
-    const boughtBefore = g.boughtTurn === 'setup' || (typeof g.boughtTurn === 'number' && g.boughtTurn < currentTurn);
+    const effectiveBoughtTurn = g.boughtTurn === 'setup' ? 1 : g.boughtTurn;
+    const boughtBefore = typeof effectiveBoughtTurn === 'number' && effectiveBoughtTurn < currentTurn;
     const aliveAtStart = !g.destroyed || g.destroyed >= currentTurn;
     return boughtBefore && aliveAtStart;
   }).reduce((sum, g) => {
     const base = SHIPS.find(s => s.id === g.type);
     return sum + (base?.maintenance || 0) * g.count;
   }, 0);
-  const remainingBeforeUpgrades = subtotal - maintenanceCost - currentTechSpent - currentShipSpent;
+  const remainingBeforeUpgrades = subtotal - (turnData.bid ?? 0) - maintenanceCost - currentTechSpent - currentShipSpent;
+
+  // Auto-cancel confirmation after 3 seconds
+  useEffect(() => {
+    if (!pendingReset) return;
+    const timer = setTimeout(() => setPendingReset(null), 3000);
+    return () => clearTimeout(timer);
+  }, [pendingReset]);
 
   function startGame() {
+    if (pendingReset !== 'start') {
+      setPendingReset('start');
+      return;
+    }
+    setPendingReset(null);
     update({ phase: 'play' });
     setTab('econ');
   }
@@ -206,11 +231,12 @@ export default function App() {
 
   // Game management
   function saveGameAs(name) {
-    const saves = loadSaves();
-    const idx = saves.findIndex(s => s.name === name);
+    const updated = [...saves];
+    const idx = updated.findIndex(s => s.name === name);
     const entry = { ...game, name, savedAt: Date.now() };
-    if (idx >= 0) saves[idx] = entry; else saves.push(entry);
-    saveSaves(saves);
+    if (idx >= 0) updated[idx] = entry; else updated.push(entry);
+    saveSaves(updated);
+    setSaves(updated);
     update({ name });
   }
 
@@ -221,8 +247,9 @@ export default function App() {
   }
 
   function deleteGame(name) {
-    const saves = loadSaves().filter(s => s.name !== name);
-    saveSaves(saves);
+    const updated = saves.filter(s => s.name !== name);
+    saveSaves(updated);
+    setSaves(updated);
   }
 
   function newGame() {
@@ -243,7 +270,7 @@ export default function App() {
       {showGameMgr && (
         <GameManager
           currentGame={game}
-          saves={loadSaves()}
+          saves={saves}
           onSave={saveGameAs}
           onLoad={loadGame}
           onDelete={deleteGame}
@@ -255,7 +282,9 @@ export default function App() {
       {isSetup && tab === 'econ' && (
         <div className="card" style={{ textAlign: 'center' }}>
           <p style={{ color: '#888', marginBottom: '0.75rem' }}>Set starting CP and ships first, then start.</p>
-          <button className="btn btn-primary" onClick={startGame}>Start Game</button>
+          <button className={`btn ${pendingReset === 'start' ? 'btn-danger-confirm' : 'btn-primary'}`} onClick={startGame}>
+            {pendingReset === 'start' ? 'Tap again to confirm' : 'Start Game'}
+          </button>
         </div>
       )}
 
@@ -272,7 +301,8 @@ export default function App() {
           fleet={fleet}
           upgrades={upgrades}
           onResetTurn={handleResetTurn}
-          pendingReset={pendingReset === 'turn'}
+          pendingReset={pendingReset}
+          setPendingReset={setPendingReset}
           umpireMode={umpireMode}
         />
       )}
@@ -313,7 +343,9 @@ export default function App() {
           />
           {isSetup && (
             <div style={{ textAlign: 'center', padding: '0.75rem 0' }}>
-              <button className="btn btn-primary" onClick={startGame}>Start Game</button>
+              <button className={`btn ${pendingReset === 'start' ? 'btn-danger-confirm' : 'btn-primary'}`} onClick={startGame}>
+                {pendingReset === 'start' ? 'Tap again to confirm' : 'Start Game'}
+              </button>
             </div>
           )}
         </>
@@ -366,7 +398,22 @@ export default function App() {
             </div>
             <button
               className={`btn ${umpireMode ? 'btn-danger' : 'btn-secondary'}`}
-              onClick={() => setUmpireMode(u => !u)}
+              onClick={() => {
+                if (!umpireMode) {
+                  // Auto-save before entering umpire mode
+                  const autoName = `Pre-umpire T${currentTurn} auto`;
+                  const currentSaves = loadSaves();
+                  const entry = { ...game, name: autoName, savedAt: Date.now() };
+                  const idx = currentSaves.findIndex(s => s.name === autoName);
+                  if (idx >= 0) currentSaves[idx] = entry; else currentSaves.push(entry);
+                  const autos = currentSaves.filter(s => s.name.endsWith(' auto')).sort((a, b) => b.savedAt - a.savedAt);
+                  const stale = new Set(autos.slice(2).map(s => s.name));
+                  const trimmed = currentSaves.filter(s => !stale.has(s.name));
+                  saveSaves(trimmed);
+                  setSaves(trimmed);
+                }
+                setUmpireMode(u => !u);
+              }}
             >
               {umpireMode ? 'Disable Umpire Mode' : 'Enable Umpire Mode'}
             </button>

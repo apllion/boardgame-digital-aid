@@ -218,7 +218,7 @@ export default function FleetManager({ turn, fleet, setFleet, ownedTechs, curren
 
   return (
     <div>
-      <h2>{isSetup ? 'Starting Ships' : `Fleet (${activeGroups.length} groups)`}</h2>
+      <h2>{isSetup ? 'Starting Ships' : `Ships (${activeGroups.length} groups)`}</h2>
 
       <div className="fleet-summary">
         <span>{totalShips} ships</span>
@@ -255,8 +255,8 @@ export default function FleetManager({ turn, fleet, setFleet, ownedTechs, curren
         const compatible = getCompatible(group.id)
 
         return (
-          <div key={group.id}>
-            <div className="fleet-row">
+          <div key={group.id} className="fleet-card">
+            <div className="fleet-info-row">
               <div className="fleet-name">
                 {editingLabel === group.id ? (
                   <input className="fleet-label-input" value={labelDraft}
@@ -282,30 +282,59 @@ export default function FleetManager({ turn, fleet, setFleet, ownedTechs, curren
               ) : (
                 <div className="fleet-stats"><span className="fleet-stat noncombat">NC</span></div>
               )}
-              <div className="fleet-action-btns">
-                {canModify && group.count > 1 && !isMoving && (
-                  <button className="fleet-btn-sm" onClick={() => startMove(group.id)}>Assign</button>
-                )}
-                {canModify && compatible.length > 0 && !isMerging && (
-                  <button className="fleet-btn-sm" onClick={() => startMerge(group.id)}>Merge</button>
-                )}
-                {outdated && (() => {
-                  const cost = base.hull * group.count
-                  const canAfford = upgradeBudget >= cost
-                  return (
-                    <button className={`fleet-upgrade-btn ${!canAfford ? 'disabled' : ''}`}
-                      onClick={() => canAfford && upgradeGroup(group.id)}
-                      disabled={!canAfford}>
-                      Upg ({cost})
-                    </button>
-                  )
-                })()}
-                <button className="fleet-btn-sm" onClick={() => setFleet(fleet.map(g => g.id === group.id ? { ...g, count: g.count + 1 } : g))}>+1</button>
-                {!isSetup && <button className="fleet-destroy-btn" onClick={() => loseOne(group.id)}>-1</button>}
-                {(isSetup && group.boughtTurn === 'setup' || group.boughtTurn === turn || umpireMode) && (
-                  <button className="fleet-remove" onClick={() => removeGroup(group.id)}>&times;</button>
-                )}
+            </div>
+            {umpireMode && stats && (
+              <div className="umpire-edit-row">
+                <label>
+                  Cnt
+                  <input type="number" className="umpire-input" value={group.count}
+                    onChange={e => { const v = parseInt(e.target.value); if (v >= 0) setFleet(fleet.map(g => g.id === group.id ? { ...g, count: v } : g)); }} />
+                </label>
+                <label>
+                  A
+                  <input type="number" className="umpire-input" value={group.techSnapshot?.atk ?? 0}
+                    onChange={e => { const v = parseInt(e.target.value); if (v >= 0) setFleet(fleet.map(g => g.id === group.id ? { ...g, techSnapshot: { ...(g.techSnapshot || currentTech), atk: v } } : g)); }} />
+                </label>
+                <label>
+                  D
+                  <input type="number" className="umpire-input" value={group.techSnapshot?.def ?? 0}
+                    onChange={e => { const v = parseInt(e.target.value); if (v >= 0) setFleet(fleet.map(g => g.id === group.id ? { ...g, techSnapshot: { ...(g.techSnapshot || currentTech), def: v } } : g)); }} />
+                </label>
+                <label>
+                  T
+                  <input type="number" className="umpire-input" value={group.techSnapshot?.tac ?? 0}
+                    onChange={e => { const v = parseInt(e.target.value); if (v >= 0) setFleet(fleet.map(g => g.id === group.id ? { ...g, techSnapshot: { ...(g.techSnapshot || currentTech), tac: v } } : g)); }} />
+                </label>
+                <label>
+                  M
+                  <input type="number" className="umpire-input" value={group.techSnapshot?.mov ?? 1}
+                    onChange={e => { const v = parseInt(e.target.value); if (v >= 1) setFleet(fleet.map(g => g.id === group.id ? { ...g, techSnapshot: { ...(g.techSnapshot || currentTech), mov: v } } : g)); }} />
+                </label>
               </div>
+            )}
+            <div className="fleet-action-row">
+              <button className="fleet-btn-sm" onClick={() => setFleet(fleet.map(g => g.id === group.id ? { ...g, count: g.count + 1 } : g))}>+1</button>
+              {!isSetup && <button className="fleet-destroy-btn" onClick={() => loseOne(group.id)}>-1</button>}
+              {canModify && group.count > 1 && !isMoving && (
+                <button className="fleet-btn-sm" onClick={() => startMove(group.id)}>Assign</button>
+              )}
+              {canModify && compatible.length > 0 && !isMerging && (
+                <button className="fleet-btn-sm" onClick={() => startMerge(group.id)}>Merge</button>
+              )}
+              {outdated && (() => {
+                const cost = base.hull * group.count
+                const canAfford = upgradeBudget >= cost
+                return (
+                  <button className={`fleet-upgrade-btn ${!canAfford ? 'disabled' : ''}`}
+                    onClick={() => canAfford && upgradeGroup(group.id)}
+                    disabled={!canAfford}>
+                    Upg ({cost})
+                  </button>
+                )
+              })()}
+              {(isSetup && group.boughtTurn === 'setup' || group.boughtTurn === turn || umpireMode) && (
+                <button className="fleet-remove" onClick={() => removeGroup(group.id)}>&times;</button>
+              )}
             </div>
 
             {/* Move panel */}

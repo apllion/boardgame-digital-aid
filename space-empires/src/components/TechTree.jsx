@@ -74,9 +74,6 @@ export default function TechTree({ turn, techPurchases, setTechPurchases, ownedT
                   </div>
                   <div className="tech-desc">
                     {tech.desc}
-                    {locked && tech.prereq && (
-                      <span style={{ color: '#e57373' }}> (Requires {TECHNOLOGIES.flatMap(c => c.techs).find(t => t.id === tech.prereq)?.name})</span>
-                    )}
                   </div>
                 </div>
                 <div className="tech-cost">{tech.cost}</div>
