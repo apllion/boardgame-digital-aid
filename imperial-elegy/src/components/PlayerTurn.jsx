@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useGameContext } from '@shared/game-tree'
 import { POWERS } from '../data/botRules'
 import { HOME_CARDS, NATIONAL_CHARACTERISTICS, MINOR_POWER_ALLIANCES, MINOR_POWER_NOTES } from '../data/playerAid'
-import { ActionsView, CombatView, WarAimsView, StackingView, FlashpointsView, ItalyView, CardIconsView, GWRulesView, TrickyRulesMenu, TrickyRuleView } from './AidViews'
+import { ActionsView, CombatView, WarAimsView, StackingView, FlashpointsView, ItalyView, CardIconsView, GWRulesView, TrickyRulesMenu, TrickyRuleView, WarDeclarationView, AllianceGuideView, ItalyGuideView } from './AidViews'
 
 function useSubView() {
   const [stack, setStack] = useState([])
@@ -191,6 +191,30 @@ export default function PlayerTurn({ powerId }) {
           onClick={() => subView.push({
             title: 'GW Rules',
             render: () => <GWRulesView />,
+          })}
+        />
+        <MenuItem
+          title="War Declaration Guide"
+          borderColor="#c0392b"
+          onClick={() => subView.push({
+            title: 'War Declaration Guide',
+            render: () => <WarDeclarationView onSelect={(view) => subView.push(view)} />,
+          })}
+        />
+        <MenuItem
+          title="Alliance & Influence Guide"
+          borderColor="#4a5adb"
+          onClick={() => subView.push({
+            title: 'Alliance & Influence Guide',
+            render: () => <AllianceGuideView onSelect={(view) => subView.push(view)} />,
+          })}
+        />
+        <MenuItem
+          title="Italy Guide"
+          borderColor="#27ae60"
+          onClick={() => subView.push({
+            title: 'Italy Guide',
+            render: () => <ItalyGuideView onSelect={(view) => subView.push(view)} />,
           })}
         />
         <MenuItem
