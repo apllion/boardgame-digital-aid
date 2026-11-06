@@ -19,11 +19,12 @@ const TABS = [
 function makeEmptyGame() {
   return {
     name: '',
-    phase: 'setup', // 'setup' or 'play'
-    turn: 1,
+    phase: 'setup-free', // 'setup-free' | 'setup-paid' | 'play'
+    turn: 0,
     startingCP: 0,
+    multiLevelTech: true, // toggle for current setup phase
     econData: {},
-    techPurchases: {},
+    techPurchases: {}, // { techId: turn | 'free' }
     fleet: [],
     upgrades: [], // [{ shipId, turn }]
   };
@@ -101,8 +102,10 @@ export default function App() {
   const [showGameMgr, setShowGameMgr] = useState(false);
   const [saves, setSaves] = useState(() => loadSaves());
 
-  const { phase, turn: currentTurn, startingCP = 0, econData, techPurchases, fleet, upgrades = [] } = game;
-  const isSetup = phase === 'setup';
+  const { phase, turn: currentTurn, startingCP = 0, multiLevelTech = true, econData, techPurchases, fleet, upgrades = [] } = game;
+  const isSetup = phase === 'setup-free' || phase === 'setup-paid';
+  const isFreeSetup = phase === 'setup-free';
+  const isPaidSetup = phase === 'setup-paid';
   const [viewTurn, setViewTurn] = useState(currentTurn);
 
   // Auto-save current game
@@ -132,7 +135,7 @@ export default function App() {
       // Advancing turn: freeze all null-snapshot ships with current tech
       const owned = new Set();
       for (const [techId, t] of Object.entries(prev.techPurchases)) {
-        if (t <= prev.turn) owned.add(techId);
+        if (t === 'free' || t <= prev.turn) owned.add(techId);
       }
       let atk = 0, def = 0, tac = 0, mov = 1;
       if (owned.has('atk1')) atk++; if (owned.has('atk2')) atk++; if (owned.has('atk3')) atk++;
@@ -169,7 +172,7 @@ export default function App() {
   const ownedTechs = useMemo(() => {
     const set = new Set();
     for (const [techId, boughtTurn] of Object.entries(techPurchases)) {
-      if (boughtTurn <= currentTurn) set.add(techId);
+      if (boughtTurn === 'free' || boughtTurn <= currentTurn) set.add(techId);
     }
     return set;
   }, [techPurchases, currentTurn]);
@@ -189,7 +192,7 @@ export default function App() {
   const turnData = econData[currentTurn] || {};
   const subtotal = carryOver + (turnData.colony ?? 0) + (turnData.mineral ?? 0) + (turnData.pipeline ?? 0);
   const maintenanceCost = fleet.filter(g => {
-    const effectiveBoughtTurn = g.boughtTurn === 'setup' ? 1 : g.boughtTurn;
+    const effectiveBoughtTurn = g.boughtTurn === 'free' ? 0 : g.boughtTurn;
     const boughtBefore = typeof effectiveBoughtTurn === 'number' && effectiveBoughtTurn < currentTurn;
     const aliveAtStart = !g.destroyed || g.destroyed >= currentTurn;
     return boughtBefore && aliveAtStart;
@@ -206,14 +209,21 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [pendingReset]);
 
-  function startGame() {
+  function advanceSetup() {
     if (pendingReset !== 'start') {
       setPendingReset('start');
       return;
     }
     setPendingReset(null);
-    update({ phase: 'play' });
-    setTab('econ');
+    if (isFreeSetup) {
+      // Move to paid setup
+      update({ phase: 'setup-paid', multiLevelTech: true });
+    } else {
+      // Start the game — freeze turn 0 ships and advance to turn 1
+      setTurn(() => 1);
+      update({ phase: 'play' });
+      setTab('econ');
+    }
   }
 
   const handleResetTurn = useCallback(() => {
@@ -243,7 +253,7 @@ export default function App() {
   function loadGame(save) {
     setGame(save);
     setShowGameMgr(false);
-    setTab(save.phase === 'setup' ? 'ships' : 'econ');
+    setTab('econ');
   }
 
   function deleteGame(name) {
@@ -255,14 +265,14 @@ export default function App() {
   function newGame() {
     setGame(makeEmptyGame());
     setShowGameMgr(false);
-    setTab('ships');
+    setTab('econ');
   }
 
   return (
     <div>
       <h1>Space Empires 4X</h1>
       <div className="subtitle">
-        {isSetup ? 'Setup' : `Econ Phase ${currentTurn}`}
+        {isFreeSetup ? 'Free Setup' : isPaidSetup ? 'Paid Setup' : `Econ Phase ${currentTurn}`}
         {umpireMode && <span className="umpire-badge">UMPIRE</span>}
         <button className="game-mgr-btn" onClick={() => setShowGameMgr(true)}>Games</button>
       </div>
@@ -279,16 +289,22 @@ export default function App() {
         />
       )}
 
-      {isSetup && tab === 'econ' && (
-        <div className="card" style={{ textAlign: 'center' }}>
-          <p style={{ color: '#888', marginBottom: '0.75rem' }}>Set starting CP and ships first, then start.</p>
-          <button className={`btn ${pendingReset === 'start' ? 'btn-danger-confirm' : 'btn-primary'}`} onClick={startGame}>
-            {pendingReset === 'start' ? 'Tap again to confirm' : 'Start Game'}
-          </button>
+      {tab === 'econ' && isSetup && (
+        <div className="card" style={{ borderLeft: `4px solid ${isFreeSetup ? '#4caf50' : '#8b7aff'}` }}>
+          {isFreeSetup && <StartingCPRow value={startingCP} onChange={v => update({ startingCP: v })} />}
+          {isFreeSetup && <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.4rem' }}>Ships and tech in this phase are free.</div>}
+          {isPaidSetup && <div style={{ fontSize: '0.85rem', color: '#ccc' }}>Spend starting CP on ships and tech.</div>}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.5rem' }}>
+            <span style={{ fontSize: '0.85rem' }}>Tech levels per chain:</span>
+            <div className="fleet-toggle" style={{ width: 'auto', marginBottom: 0 }}>
+              <button className={multiLevelTech ? '' : 'active'} onClick={() => update({ multiLevelTech: false })}>One</button>
+              <button className={multiLevelTech ? 'active' : ''} onClick={() => update({ multiLevelTech: true })}>Many</button>
+            </div>
+          </div>
         </div>
       )}
 
-      {!isSetup && tab === 'econ' && (
+      {tab === 'econ' && (
         <EconPhase
           viewTurn={viewTurn}
           setViewTurn={setViewTurn}
@@ -307,6 +323,14 @@ export default function App() {
         />
       )}
 
+      {isSetup && (tab === 'econ' || tab === 'ships') && (
+        <div style={{ textAlign: 'center', padding: '0.75rem 0' }}>
+          <button className={`btn ${pendingReset === 'start' ? 'btn-danger-confirm' : 'btn-primary'}`} onClick={advanceSetup}>
+            {pendingReset === 'start' ? 'Tap again to confirm' : isFreeSetup ? 'Next: Paid Setup' : 'Start Game'}
+          </button>
+        </div>
+      )}
+
       {tab === 'tech' && (
         <TechTree
           turn={currentTurn}
@@ -317,16 +341,13 @@ export default function App() {
           remainingCP={remainingBeforeUpgrades}
           umpireMode={umpireMode}
           isSetup={isSetup}
+          isFreeSetup={isFreeSetup}
+          multiLevelTech={multiLevelTech}
         />
       )}
 
       {tab === 'ships' && (
         <>
-          {isSetup && (
-            <div className="card" style={{ borderLeft: '4px solid #8b7aff' }}>
-              <StartingCPRow value={startingCP} onChange={v => update({ startingCP: v })} />
-            </div>
-          )}
           <FleetManager
             turn={currentTurn}
             fleet={fleet}
@@ -335,19 +356,13 @@ export default function App() {
             currentTurnSpent={currentShipSpent}
             umpireMode={umpireMode}
             isSetup={isSetup}
+            isFreeSetup={isFreeSetup}
             upgrades={upgrades}
             setUpgrades={setUpgrades}
             upgradeSpent={currentUpgradeSpent}
             upgradeBudget={remainingBeforeUpgrades - currentUpgradeSpent}
             remainingCP={remainingBeforeUpgrades}
           />
-          {isSetup && (
-            <div style={{ textAlign: 'center', padding: '0.75rem 0' }}>
-              <button className={`btn ${pendingReset === 'start' ? 'btn-danger-confirm' : 'btn-primary'}`} onClick={startGame}>
-                {pendingReset === 'start' ? 'Tap again to confirm' : 'Start Game'}
-              </button>
-            </div>
-          )}
         </>
       )}
 

@@ -84,16 +84,16 @@ function turnSpending(techPurchases, fleet, upgrades, turnNum) {
 
 // Calculate remaining CP for a given turn (recursive for carry-over)
 export function calcTurnRemaining(econData, techPurchases, fleet, upgrades, turnNum, startingCP = 0) {
-  if (turnNum < 1) return startingCP
+  if (turnNum < 0) return startingCP
   const data = econData[turnNum] || {}
-  const carryOver = calcTurnRemaining(econData, techPurchases, fleet, upgrades, turnNum - 1, startingCP)
+  const carryOver = turnNum === 0 ? startingCP : calcTurnRemaining(econData, techPurchases, fleet, upgrades, turnNum - 1, startingCP)
 
   const income = (data.colony ?? 0) + (data.mineral ?? 0) + (data.pipeline ?? 0)
   const subtotal = carryOver + income
 
   // Maintenance = ships alive at start of this turn (setup ships count as turn 1)
   const maintenance = fleet.filter(g => {
-    const effectiveBoughtTurn = g.boughtTurn === 'setup' ? 1 : g.boughtTurn
+    const effectiveBoughtTurn = g.boughtTurn === 'free' ? 0 : g.boughtTurn
     const boughtBefore = typeof effectiveBoughtTurn === 'number' && effectiveBoughtTurn < turnNum
     const aliveAtStart = !g.destroyed || g.destroyed >= turnNum
     return boughtBefore && aliveAtStart
@@ -123,7 +123,7 @@ export default function EconPhase({ viewTurn, setViewTurn, currentTurn, advanceT
   function maintenanceForTurn(t) {
     return fleet.filter(g => {
       // Setup ships count as bought on turn 1 — maintenance starts turn 2
-      const effectiveBoughtTurn = g.boughtTurn === 'setup' ? 1 : g.boughtTurn
+      const effectiveBoughtTurn = g.boughtTurn
       const boughtBefore = typeof effectiveBoughtTurn === 'number' && effectiveBoughtTurn < t
       const aliveAtStart = !g.destroyed || g.destroyed >= t
       return boughtBefore && aliveAtStart
@@ -188,11 +188,11 @@ export default function EconPhase({ viewTurn, setViewTurn, currentTurn, advanceT
   return (
     <div>
       <div className="turn-selector">
-        <button className="stepper-btn" onClick={() => setViewTurn(t => Math.max(1, t - 1))}>&lt;</button>
+        <button className="stepper-btn" onClick={() => setViewTurn(t => Math.max(0, t - 1))}>&lt;</button>
         <div style={{ textAlign: 'center' }}>
-          <div className="turn-num">{turn}</div>
+          <div className="turn-num">{turn === 0 ? 'Setup' : turn}</div>
           <div className="turn-label">
-            {!isCurrentTurn ? `(viewing — current: ${currentTurn})` : 'Econ Phase'}
+            {!isCurrentTurn ? `(viewing — current: ${currentTurn === 0 ? 'Setup' : currentTurn})` : turn === 0 ? 'Starting Purchases' : 'Econ Phase'}
           </div>
         </div>
         {isCurrentTurn ? (
@@ -212,18 +212,24 @@ export default function EconPhase({ viewTurn, setViewTurn, currentTurn, advanceT
       </div>
 
       <div className="card">
-        <h3 style={{ marginBottom: '0.5rem', color: '#8b7aff' }}>Income</h3>
-        <EconRow label="Carry Over CP" value={carryOver} readOnly />
-        <EconRow label="Colony CP" value={colony} onChange={v => updateField('colony', v)} readOnly={!editable} />
-        <EconRow label="Mineral CP" value={mineral} onChange={v => updateField('mineral', v)} readOnly={!editable} />
-        <EconRow label="MS Pipeline CP" value={pipeline} onChange={v => updateField('pipeline', v)} readOnly={!editable} />
+        <h3 style={{ marginBottom: '0.5rem', color: '#8b7aff' }}>{turn === 0 ? 'Starting Budget' : 'Income'}</h3>
+        {turn === 0 ? (
+          <EconRow label="Starting CP" value={carryOver} readOnly />
+        ) : (
+          <>
+            <EconRow label="Carry Over CP" value={carryOver} readOnly />
+            <EconRow label="Colony CP" value={colony} onChange={v => updateField('colony', v)} readOnly={!editable} />
+            <EconRow label="Mineral CP" value={mineral} onChange={v => updateField('mineral', v)} readOnly={!editable} />
+            <EconRow label="MS Pipeline CP" value={pipeline} onChange={v => updateField('pipeline', v)} readOnly={!editable} />
+          </>
+        )}
         <EconRow label="Subtotal" value={subtotal} readOnly className="subtotal" />
       </div>
 
       <div className="card">
         <h3 style={{ marginBottom: '0.5rem', color: '#f9a825' }}>Spending</h3>
-        <EconRow label="Turn Order Bid" value={bid} onChange={v => updateField('bid', Math.abs(v))} readOnly={!editable} />
-        <EconRow label="Maintenance" value={maintenance} readOnly />
+        {turn > 0 && <EconRow label="Turn Order Bid" value={bid} onChange={v => updateField('bid', Math.abs(v))} readOnly={!editable} />}
+        {turn > 0 && <EconRow label="Maintenance" value={maintenance} readOnly />}
         <EconRow label="Tech Spending" value={techSpent} readOnly />
         {techItems.length > 0 && (
           <div className="spending-detail">

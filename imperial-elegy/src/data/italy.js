@@ -130,6 +130,85 @@ export const ITALY_FLASHPOINT = {
   allianceTableChoices: { first: 'FR/AU*', second: 'Germany', third: 'UK' },
 }
 
+// Designer rulings from BGG forums (ColonelMPanther = Michael Lorino)
+export const ITALY_DESIGNER_RULINGS = [
+  {
+    topic: 'Unification War',
+    ruling: 'Italian unification war aims must be adjacent to EACH OTHER, not to the ally marker.',
+    source: 'https://boardgamegeek.com/thread/3722497',
+  },
+  {
+    topic: 'Uprising',
+    ruling: 'Rebel and player armies CAN coexist in the same space — no automatic battle occurs.',
+    source: 'https://boardgamegeek.com/thread/3767214',
+  },
+  {
+    topic: 'Uprising',
+    ruling: 'Uprising only affects PLAYER CONTROLLED spaces, not allied spaces. Allies give control only for flashpoint domination.',
+    source: 'https://boardgamegeek.com/thread/3662984',
+  },
+  {
+    topic: 'Uprising',
+    ruling: 'Fort does nothing for rebels — it still belongs to the player when rebels appear.',
+    source: 'https://boardgamegeek.com/thread/3662984',
+  },
+  {
+    topic: 'AU & Italy',
+    ruling: 'AU Italian full citizenship covers ALL Italian minor powers, but AU can only absorb one at a time.',
+    source: 'https://boardgamegeek.com/thread/3651335',
+  },
+  {
+    topic: 'AU & Italy',
+    ruling: 'AU citizenship does NOT prevent Italian revolts from the mandatory Italy card. Internal war happens regardless of alliances.',
+    source: 'https://boardgamegeek.com/thread/3649975',
+  },
+  {
+    topic: 'AU & Italy',
+    ruling: 'AU Arbiter of Italy lets them declare wars of liberation targeting Italian spaces even without rebels present.',
+    source: 'https://boardgamegeek.com/thread/3702734',
+  },
+  {
+    topic: 'Unification',
+    ruling: 'If Rome is player-controlled when Italy unifies, unified Italy has NO capital. Can only be eliminated by stability reaching 0.',
+    source: 'https://boardgamegeek.com/thread/3651335',
+  },
+  {
+    topic: 'Internal War',
+    ruling: 'Minor powers still receive units even if no uncontrolled space to take (e.g., all spaces player-controlled).',
+    source: 'https://boardgamegeek.com/thread/3684244',
+  },
+  {
+    topic: 'Nationalist Wave',
+    ruling: 'When an Italian minor takes another\'s space via Nationalist Wave, ally markers on the absorbed space are REMOVED.',
+    source: 'https://boardgamegeek.com/thread/3634342',
+  },
+  {
+    topic: 'Unification',
+    ruling: 'The unification roll only has POSITIVE modifiers — there are no negative DRMs.',
+    source: 'https://boardgamegeek.com/thread/3716606',
+  },
+  {
+    topic: 'Flashpoint',
+    ruling: '+1 card from Italy is only from winning an actual war of unification — NOT from Nationalist Wave result.',
+    source: 'https://boardgamegeek.com/thread/3634342',
+  },
+  {
+    topic: 'Flashpoint',
+    ruling: 'If playing Papal Influence is what CREATES your flashpoint control, you do NOT get the +1 card from that same action.',
+    source: 'https://boardgamegeek.com/thread/3642292',
+  },
+  {
+    topic: 'Redeployment',
+    ruling: 'Italian army in Tuscany in 1870 scenario redeploys to Rome during End Phase.',
+    source: 'https://boardgamegeek.com/thread/3752613',
+  },
+  {
+    topic: 'Control',
+    ruling: 'Cannot place a control marker on an independent minor power using CP actions — only diplomacy markers.',
+    source: 'https://boardgamegeek.com/thread/3748767',
+  },
+]
+
 export const ITALY_GOTCHAS = [
   { mistake: 'Unification roll succeeds on raw d6', correction: 'Need ≥7 on d6. Base roll alone can never unify. Modifiers are mandatory.' },
   { mistake: 'Ignoring active player choice', correction: 'In Internal Italian War and Nationalist Wave, active player picks which Italian state benefits. Strategic choice.' },

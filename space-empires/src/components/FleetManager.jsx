@@ -51,7 +51,7 @@ function nextLabel(type, fleet) {
   return `${type} #${Date.now()}`
 }
 
-export default function FleetManager({ turn, fleet, setFleet, ownedTechs, currentTurnSpent, umpireMode, isSetup, upgrades = [], setUpgrades, upgradeSpent = 0, upgradeBudget = 0, remainingCP = 0 }) {
+export default function FleetManager({ turn, fleet, setFleet, ownedTechs, currentTurnSpent, umpireMode, isSetup, isFreeSetup, upgrades = [], setUpgrades, upgradeSpent = 0, upgradeBudget = 0, remainingCP = 0 }) {
   const [showAdd, setShowAdd] = useState(false)
   const [moveFrom, setMoveFrom] = useState(null) // { groupId, count }
   const [mergeFrom, setMergeFrom] = useState(null)
@@ -93,7 +93,7 @@ export default function FleetManager({ turn, fleet, setFleet, ownedTechs, curren
       label: nextLabel(shipId, prev),
       // No snapshot yet — lives with current tech until turn advances
       techSnapshot: base.noncombat ? null : null,
-      boughtTurn: isSetup ? 'setup' : turn,
+      boughtTurn: isFreeSetup ? 'free' : turn,
     }])
     setShowAdd(false)
   }
@@ -101,8 +101,8 @@ export default function FleetManager({ turn, fleet, setFleet, ownedTechs, curren
   function removeGroup(id) {
     const group = fleet.find(g => g.id === id)
     if (!group) return
-    if (isSetup && group.boughtTurn === 'setup') setFleet(fleet.filter(g => g.id !== id))
-    else if (group.boughtTurn === turn || umpireMode) setFleet(fleet.filter(g => g.id !== id))
+    const currentTag = isFreeSetup ? 'free' : turn
+    if (group.boughtTurn === currentTag || umpireMode) setFleet(fleet.filter(g => g.id !== id))
   }
 
   function loseOne(id) {
@@ -248,8 +248,8 @@ export default function FleetManager({ turn, fleet, setFleet, ownedTechs, curren
             return old.attack !== upgraded.attack || old.defense !== upgraded.defense ||
               old.tactics !== upgraded.tactics || old.move !== upgraded.move
           })()
-        const canModify = isSetup ? group.boughtTurn === 'setup'
-          : umpireMode || true // can always move/merge/lose active ships
+        const currentTag = isFreeSetup ? 'free' : turn
+        const canModify = group.boughtTurn === currentTag || umpireMode
         const isMoving = moveFrom?.groupId === group.id
         const isMerging = mergeFrom === group.id
         const compatible = getCompatible(group.id)
@@ -332,7 +332,7 @@ export default function FleetManager({ turn, fleet, setFleet, ownedTechs, curren
                   </button>
                 )
               })()}
-              {(isSetup && group.boughtTurn === 'setup' || group.boughtTurn === turn || umpireMode) && (
+              {(group.boughtTurn === currentTag || umpireMode) && (
                 <button className="fleet-remove" onClick={() => removeGroup(group.id)}>&times;</button>
               )}
             </div>

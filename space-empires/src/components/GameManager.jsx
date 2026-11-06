@@ -50,7 +50,7 @@ export default function GameManager({ currentGame, saves, onSave, onLoad, onDele
                 <div className="game-mgr-info" onClick={() => onLoad(save)}>
                   <strong>{save.name}</strong>
                   <span className="game-mgr-detail">
-                    {save.phase === 'setup' ? 'Setup' : `Turn ${save.turn}`}
+                    {save.phase.startsWith('setup') ? 'Setup' : `Turn ${save.turn}`}
                     {' · '}{save.fleet.length} ships
                   </span>
                 </div>

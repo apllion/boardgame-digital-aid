@@ -333,6 +333,100 @@ export const HOME_CARD_WAR_POWERS = [
   },
 ]
 
+// Designer rulings from BGG forums (ColonelMPanther = Michael Lorino)
+export const WAR_DESIGNER_RULINGS = [
+  {
+    topic: 'War Declaration',
+    ruling: 'No wars can be declared when WTT is 3 or higher — including via home cards.',
+    source: 'https://boardgamegeek.com/thread/3732968',
+  },
+  {
+    topic: 'War Budget',
+    ruling: 'The war budget is how many ACTIONS you get, not a CP pool. Each maneuver step costs 1 action from your budget.',
+    source: 'https://boardgamegeek.com/thread/3716606',
+  },
+  {
+    topic: 'War Budget',
+    ruling: 'Attacker CAN play a mandatory event as their war budget card — the event triggers first.',
+    source: 'https://boardgamegeek.com/thread/3733559',
+  },
+  {
+    topic: 'War Budget',
+    ruling: 'All CP from the declaring card are locked to the war — you cannot split them.',
+    source: 'https://boardgamegeek.com/thread/3716606',
+  },
+  {
+    topic: 'War Budget',
+    ruling: 'CP chains CAN be used to declare war.',
+    source: 'https://boardgamegeek.com/thread/3681821',
+  },
+  {
+    topic: 'War Budget',
+    ruling: 'Blockade reduces war budget during GW — decreases max industry (and thus budget) by 1 per year.',
+    source: 'https://boardgamegeek.com/thread/3732191',
+  },
+  {
+    topic: 'War Aims',
+    ruling: 'Conquest can target one KEY and one TERRITORY (circles on the map are territories, not keys).',
+    source: 'https://boardgamegeek.com/thread/3697907',
+  },
+  {
+    topic: 'War Aims',
+    ruling: 'You are NOT limited to only attacking your war aim spaces. You can move into and attack any enemy spaces during a war.',
+    source: 'https://boardgamegeek.com/thread/3664090',
+  },
+  {
+    topic: 'War Aims',
+    ruling: 'The maneuver step does NOT end when the attacker takes their war aims. The defender can still fight back.',
+    source: 'https://boardgamegeek.com/thread/3632551',
+  },
+  {
+    topic: 'Calls to War',
+    ruling: 'Calling allies is OPTIONAL — you choose which allies to call and in what order.',
+    source: 'https://boardgamegeek.com/thread/3697907',
+  },
+  {
+    topic: 'Calls to War',
+    ruling: 'Truces prevent calling allies. If two players have a truce, neither can call the other.',
+    source: 'https://boardgamegeek.com/thread/3738695',
+  },
+  {
+    topic: 'Calls to War',
+    ruling: 'No truces with minor powers.',
+    source: 'https://boardgamegeek.com/thread/3748169',
+  },
+  {
+    topic: 'Victory',
+    ruling: 'ERRATA: Normal Victory requires OCCUPYING war aim spaces, not "controlling" — you cannot take control during a war per 15.3.',
+    source: 'https://boardgamegeek.com/thread/3726278',
+  },
+  {
+    topic: 'Treaty',
+    ruling: 'All treaty options are resolved SIMULTANEOUSLY — you cannot chain one into enabling another.',
+    source: 'https://boardgamegeek.com/thread/3647303',
+  },
+  {
+    topic: 'Treaty',
+    ruling: 'Primary belligerent can award treaty options to allies — spaces, reparations, and realignments can go to any ally.',
+    source: 'https://boardgamegeek.com/thread/3647129',
+  },
+  {
+    topic: 'Treaty',
+    ruling: 'Negotiated Peace: the "winner" is whoever gets the treaty option. Only primary belligerents need to agree, but cannot impose options on player allies without consent.',
+    source: 'https://boardgamegeek.com/thread/3726961',
+  },
+  {
+    topic: 'Treaty',
+    ruling: 'War reparations: the DEFENDER can always take them. Only the attacker has restrictions.',
+    source: 'https://boardgamegeek.com/thread/3712992',
+  },
+  {
+    topic: 'Home Card',
+    ruling: 'UK Balance of Power cannot be used against own allies (errata 8.1.2).',
+    source: 'https://boardgamegeek.com/thread/3734025',
+  },
+]
+
 export const WAR_GOTCHAS = [
   {
     category: 'Declaration',

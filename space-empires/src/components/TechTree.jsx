@@ -1,22 +1,24 @@
 import { TECHNOLOGIES } from '../data/gameData.js';
 
-export default function TechTree({ turn, techPurchases, setTechPurchases, ownedTechs, currentTurnSpent, remainingCP = 0, umpireMode, isSetup }) {
+export default function TechTree({ turn, techPurchases, setTechPurchases, ownedTechs, currentTurnSpent, remainingCP = 0, umpireMode, isSetup, isFreeSetup, multiLevelTech }) {
+
+  const currentTag = isFreeSetup ? 'free' : turn
 
   function toggleTech(tech) {
     const boughtTurn = techPurchases[tech.id]
     if (boughtTurn != null) {
-      // Can only unbuy if bought this turn (or umpire mode)
-      if (boughtTurn !== turn && !umpireMode) return
+      // Can only unbuy if bought this phase (or umpire mode)
+      if (boughtTurn !== currentTag && !umpireMode) return
       setTechPurchases(prev => {
         const next = { ...prev }
-        // Cascade: also remove techs bought this turn that depend on this
+        // Cascade: also remove techs bought this phase that depend on this
         const toRemove = new Set([tech.id])
         let changed = true
         while (changed) {
           changed = false
           for (const cat of TECHNOLOGIES) {
             for (const t of cat.techs) {
-              if (t.prereq && toRemove.has(t.prereq) && next[t.id] === turn && !toRemove.has(t.id)) {
+              if (t.prereq && toRemove.has(t.prereq) && next[t.id] === currentTag && !toRemove.has(t.id)) {
                 toRemove.add(t.id)
                 changed = true
               }
@@ -29,7 +31,7 @@ export default function TechTree({ turn, techPurchases, setTechPurchases, ownedT
     } else {
       // Buy: prereq must be owned
       if (tech.prereq && !ownedTechs.has(tech.prereq)) return
-      setTechPurchases(prev => ({ ...prev, [tech.id]: turn }))
+      setTechPurchases(prev => ({ ...prev, [tech.id]: currentTag }))
     }
   }
 
@@ -53,9 +55,12 @@ export default function TechTree({ turn, techPurchases, setTechPurchases, ownedT
           {cat.techs.map(tech => {
             const boughtTurn = techPurchases[tech.id]
             const owned = ownedTechs.has(tech.id)
-            const boughtThisTurn = boughtTurn === turn
-            const locked = !owned && tech.prereq && !ownedTechs.has(tech.prereq)
-            const frozenPrev = owned && !boughtThisTurn && !umpireMode
+            const boughtThisPhase = boughtTurn === currentTag
+            const prereqMissing = !owned && tech.prereq && !ownedTechs.has(tech.prereq)
+            // One level per phase: can't buy if prereq was bought this same phase (unless multiLevelTech)
+            const prereqBoughtThisPhase = !owned && !multiLevelTech && tech.prereq && techPurchases[tech.prereq] === currentTag && !umpireMode
+            const locked = prereqMissing || prereqBoughtThisPhase
+            const frozenPrev = owned && !boughtThisPhase && !umpireMode
 
             return (
               <div
@@ -63,14 +68,15 @@ export default function TechTree({ turn, techPurchases, setTechPurchases, ownedT
                 className={`tech-item ${locked ? 'locked' : ''} ${frozenPrev ? 'frozen' : ''}`}
                 onClick={() => !locked && !frozenPrev && toggleTech(tech)}
               >
-                <div className={`tech-check ${owned ? 'bought' : ''} ${boughtThisTurn ? 'this-turn' : ''}`}>
+                <div className={`tech-check ${owned ? 'bought' : ''} ${boughtThisPhase ? 'this-turn' : ''}`}>
                   {owned ? '\u2713' : ''}
                 </div>
                 <div className="tech-info">
                   <div className="tech-name">
                     {tech.name}
-                    {boughtThisTurn && <span className="turn-badge">T{turn}</span>}
-                    {frozenPrev && <span className="turn-badge frozen-badge">T{boughtTurn}</span>}
+                    {boughtThisPhase && boughtTurn === 'free' && <span className="turn-badge" style={{ background: '#4caf50' }}>Free</span>}
+                    {boughtThisPhase && boughtTurn !== 'free' && <span className="turn-badge">T{turn}</span>}
+                    {frozenPrev && <span className="turn-badge frozen-badge">{boughtTurn === 'free' ? 'Free' : `T${boughtTurn}`}</span>}
                   </div>
                   <div className="tech-desc">
                     {tech.desc}

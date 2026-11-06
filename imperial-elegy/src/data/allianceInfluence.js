@@ -122,6 +122,80 @@ export const GW_OUTREACH = {
   ],
 }
 
+// Designer rulings from BGG forums (ColonelMPanther = Michael Lorino)
+export const ALLIANCE_DESIGNER_RULINGS = [
+  {
+    topic: 'MPIT',
+    ruling: 'Automatic alliance shifts (from being attacked, etc.) do NOT affect the MPIT. The power will drift back at next resolution unless CP is spent.',
+    source: 'https://boardgamegeek.com/thread/3747948',
+  },
+  {
+    topic: 'Diplomacy',
+    ruling: 'One influence OR one diplomacy per impulse (not both). But you CAN remove AND place in the same impulse.',
+    source: 'https://boardgamegeek.com/thread/3742968',
+  },
+  {
+    topic: 'Diplomacy',
+    ruling: 'Only ONE diplomacy marker can exist on any given minor power.',
+    source: 'https://boardgamegeek.com/thread/3742688',
+  },
+  {
+    topic: 'Diplomacy',
+    ruling: 'Diplomacy markers do NOT require LoC to place.',
+    source: 'https://boardgamegeek.com/thread/3747582',
+  },
+  {
+    topic: 'Diplomacy',
+    ruling: 'Diplomacy + Alliance in same impulse is legal. Play a 4CP card: 1CP diplomacy + 3CP alliance.',
+    source: 'https://boardgamegeek.com/thread/3711696',
+  },
+  {
+    topic: 'Influence',
+    ruling: 'Cannot place influence in minor power spaces — use diplomacy/ally instead.',
+    source: 'https://boardgamegeek.com/thread/3701213',
+  },
+  {
+    topic: 'Influence',
+    ruling: 'Cannot remove influence on Africa submap after Berlin Conference is played — applies to ALL players.',
+    source: 'https://boardgamegeek.com/thread/3658249',
+  },
+  {
+    topic: 'Minor Powers',
+    ruling: 'Cannot move units into allied minor power spaces in peacetime. Allied spaces are not "controlled" or "uncontrolled with influence."',
+    source: 'https://boardgamegeek.com/thread/3701058',
+  },
+  {
+    topic: 'Minor Powers',
+    ruling: 'Allies count as "control" ONLY for dominating flashpoints — not for any other game purpose.',
+    source: 'https://boardgamegeek.com/thread/3662984',
+  },
+  {
+    topic: 'Minor Powers',
+    ruling: 'Minor power allies DO count toward power projection.',
+    source: 'https://boardgamegeek.com/thread/3721951',
+  },
+  {
+    topic: 'Minor Powers',
+    ruling: 'If at 5-ally limit, you CAN remove an existing ally to respond to a seek aid request.',
+    source: 'https://boardgamegeek.com/thread/3702768',
+  },
+  {
+    topic: 'Minor Powers',
+    ruling: 'Minor powers attacked simultaneously in the same war DO support each other, even if not formally allied. Support is halved.',
+    source: 'https://boardgamegeek.com/thread/3761504',
+  },
+  {
+    topic: 'War & Alliances',
+    ruling: 'Joining a war as ally does NOT shift you on the alliance track. Only the defender shifts away from the attacker.',
+    source: 'https://boardgamegeek.com/thread/3718665',
+  },
+  {
+    topic: 'War & Alliances',
+    ruling: 'Aiding a minor power ally does NOT require playing a card to the war budget.',
+    source: 'https://boardgamegeek.com/thread/3653459',
+  },
+]
+
 export const ALLIANCE_GOTCHAS = [
   { mistake: '3-player cap ignored', correction: 'Resolution order matters. If one faction fills 3 slots first, latecomers are locked out.' },
   { mistake: 'Treating 1 influence as a win', correction: 'Influence ≥ 2 = a win. Influence of 1 = DRM only.' },

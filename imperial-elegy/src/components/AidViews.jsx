@@ -16,17 +16,19 @@ import {
   WAR_GLOSSARY, WAR_DECLARATION_FLOW, WAR_AIM_DETAILS, WAR_AIM_QUICK_GUIDE,
   CALL_TO_WAR, WAR_BUDGET, WARTIME_SOP_PREGW, WARTIME_ACTION_LIST,
   VICTORY_TYPES_DETAILED, TREATY_OPTIONS_DETAILED, DEMOBILIZATION_STEPS,
-  HOME_CARD_WAR_POWERS, WAR_GOTCHAS,
+  HOME_CARD_WAR_POWERS, WAR_GOTCHAS, WAR_DESIGNER_RULINGS,
 } from '../data/warDeclaration'
 import {
   ALLIANCE_GLOSSARY, TWO_SYSTEMS, DIPLOMACY_PIPELINE,
   MPIT_STRUCTURE, ALLIANCE_RESOLUTION as ALLIANCE_RESOLUTION_DETAIL,
   INFLUENCE_ACTIONS, ALLIANCES_IN_WAR, GW_OUTREACH, ALLIANCE_GOTCHAS,
+  ALLIANCE_DESIGNER_RULINGS,
 } from '../data/allianceInfluence'
 import {
   ITALY_PHASES, ITALIAN_MINOR_POWER_TABLE, UNIFICATION_DIE_ROLL,
   KINGDOM_OF_ITALY_TABLE, ITALIAN_WARS_OF_UNIFICATION,
   ITALIAN_REDEPLOYMENT, ITALY_FLASHPOINT, ITALY_GOTCHAS,
+  ITALY_DESIGNER_RULINGS,
 } from '../data/italy'
 
 export function ActionsView({ isWartime }) {
@@ -430,6 +432,30 @@ export function TrickyRulesMenu({ onSelect }) {
           <span className="gt-child-label">{rule.title}</span>
           <span className="gt-child-arrow">&rsaquo;</span>
         </button>
+      ))}
+    </div>
+  )
+}
+
+// --- Shared: Designer Rulings View ---
+
+function DesignerRulingsView({ rulings }) {
+  const topics = [...new Set(rulings.map(r => r.topic))]
+  return (
+    <div>
+      <div style={{ fontSize: '0.8rem', color: '#888', marginBottom: '0.75rem' }}>
+        Official clarifications from designer Michael Lorino (ColonelMPanther) on BGG.
+      </div>
+      {topics.map(topic => (
+        <div key={topic} className="card" style={{ borderLeftColor: '#9b59b6', marginBottom: '0.5rem' }}>
+          <div className="card-title">{topic}</div>
+          {rulings.filter(r => r.topic === topic).map((r, i) => (
+            <div key={i} style={{ marginBottom: '0.4rem', paddingBottom: '0.3rem', borderBottom: '1px solid #333' }}>
+              <div style={{ fontSize: '0.85rem', color: '#ccc' }}>{r.ruling}</div>
+              <a href={r.source} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.7rem', color: '#666' }}>BGG thread</a>
+            </div>
+          ))}
+        </div>
       ))}
     </div>
   )
