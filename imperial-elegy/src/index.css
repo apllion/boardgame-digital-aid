@@ -577,8 +577,53 @@ h3 {
   text-align: center;
 }
 
+.power-chip {
+  position: relative;
+}
+
 .power-chip.active {
   border-color: transparent;
+}
+
+.bot-indicator {
+  display: block;
+  font-size: 0.55rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  margin-top: 0.1rem;
+}
+
+.bot-assignment {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.bot-assign-chip {
+  flex: 1;
+  min-width: 70px;
+  padding: 0.5rem 0.4rem;
+  border: 2px solid #444;
+  border-radius: 8px;
+  background: #252540;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.bot-assign-chip.is-bot {
+  background: #1b3a1b;
+}
+
+.bot-assign-label {
+  font-size: 0.7rem;
+  color: #888;
 }
 
 .war-toggle {

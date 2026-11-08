@@ -384,8 +384,8 @@ export const ACTION_PHASE_BREAKDOWN = [
 export const STACKING_RULES = [
   { region: 'Europe', limit: '3 armies' },
   { region: 'Africa/Asia', limit: '2 armies' },
-  { region: 'Naval base', limit: 'Unlimited' },
-  { region: 'Ports', limit: '4 naval units' },
+  { region: 'Naval box', limit: 'Unlimited' },
+  { region: 'Naval base/Ports', limit: '4 naval units' },
 ]
 
 // Alliance Resolution Step [8.6]

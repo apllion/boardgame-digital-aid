@@ -24,7 +24,7 @@ function loadState() {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) return JSON.parse(saved)
   } catch {}
-  return { powerId: 'GE', warMode: 'peace' } // 'peace' | 'war' | 'gw'
+  return { powerId: 'GE', warMode: 'peace', bots: {} } // bots: { GE: true, UK: false, ... }
 }
 
 function MenuItem({ title, borderColor, onClick }) {
@@ -83,9 +83,10 @@ export default function PlayerAid({ onBack }) {
   const [phase, setPhase] = useState('action')
   const [subView, setSubView] = useState(null)
 
-  const { powerId, warMode = 'peace' } = state
+  const { powerId, warMode = 'peace', bots = {} } = state
   const isWartime = warMode === 'war' || warMode === 'gw'
   const isGW = warMode === 'gw'
+  const isBot = !!bots[powerId]
 
   function updateState(fields) {
     const next = { ...state, ...fields }
@@ -123,6 +124,7 @@ export default function PlayerAid({ onBack }) {
             onClick={() => updateState({ powerId: id })}
           >
             {id}
+            {bots[id] && <span className="bot-indicator">bot</span>}
           </button>
         ))}
       </div>
@@ -182,7 +184,15 @@ export default function PlayerAid({ onBack }) {
 
       {phase === 'action' && (
         <div>
-          <h2>{isGW ? 'GW Actions' : isWartime ? 'Wartime Actions' : 'Peacetime Actions'}</h2>
+          <h2>{isBot ? `${power.name} (Bot)` : isGW ? 'GW Actions' : isWartime ? 'Wartime Actions' : 'Peacetime Actions'}</h2>
+          {isBot && (
+            <div className="card" style={{ borderLeftColor: '#2e7d32', marginBottom: '0.75rem' }}>
+              <div className="card-detail" style={{ fontSize: '0.85rem' }}>
+                This power is controlled by a bot. Use the Bot Aid for impulse flowcharts.
+              </div>
+              <button className="btn btn-secondary" style={{ marginTop: '0.5rem' }} onClick={onBack}>Open Bot Aid</button>
+            </div>
+          )}
           {isGW && (
             <div className="card" style={{ borderLeftColor: '#c0392b', marginBottom: '0.75rem' }}>
               <div className="card-title">Trench Rules [28.1]</div>
@@ -251,6 +261,21 @@ export default function PlayerAid({ onBack }) {
 
       {phase === 'ref' && (
         <div>
+          <h2>Bot Assignment</h2>
+          <div className="bot-assignment">
+            {TURN_ORDER.map(id => (
+              <button
+                key={id}
+                className={`bot-assign-chip ${bots[id] ? 'is-bot' : ''}`}
+                style={{ borderColor: POWERS[id].color }}
+                onClick={() => updateState({ bots: { ...bots, [id]: !bots[id] } })}
+              >
+                <span style={{ color: POWERS[id].color, fontWeight: 700 }}>{id}</span>
+                <span className="bot-assign-label">{bots[id] ? 'Bot' : 'Player'}</span>
+              </button>
+            ))}
+          </div>
+
           <h2>Reference</h2>
           <div className="gt-children-list">
             <MenuItem title="National Characteristics" onClick={() => setSubView({ title: 'National Characteristics', render: () => <NationalTraitsView powerId={powerId} /> })} />
