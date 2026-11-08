@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useGameContext } from '@shared/game-tree'
 import { POWERS } from '../data/botRules'
 import { HOME_CARDS, NATIONAL_CHARACTERISTICS, MINOR_POWER_ALLIANCES, MINOR_POWER_NOTES } from '../data/playerAid'
-import { ActionsView, CombatView, WarAimsView, StackingView, FlashpointsView, ItalyView, CardIconsView, GWRulesView, TrickyRulesMenu, TrickyRuleView, WarDeclarationView, AllianceGuideView, ItalyGuideView } from './AidViews'
+import { ActionsView, CombatView, WarAimsView, StackingView, FlashpointsView, ItalyView, CardIconsView, GWRulesView, TrickyRulesMenu, TrickyRuleView, WarDeclarationView, AllianceGuideView, ItalyGuideView, LandBattleWorkflow, NavalBattleWorkflow } from './AidViews'
 
 function useSubView() {
   const [stack, setStack] = useState([])
@@ -114,7 +114,23 @@ export default function PlayerTurn({ powerId }) {
           title={isWartime ? 'Wartime Actions' : 'Peacetime Actions'}
           onClick={() => subView.push({
             title: isWartime ? 'Wartime Actions' : 'Peacetime Actions',
-            render: () => <ActionsView isWartime={isWartime} />,
+            render: () => <ActionsView isWartime={isWartime} powerId={powerId} />,
+          })}
+        />
+        <MenuItem
+          title="Land Battle Guide"
+          borderColor="#c0392b"
+          onClick={() => subView.push({
+            title: 'Land Battle Guide',
+            render: () => <LandBattleWorkflow powerId={powerId} />,
+          })}
+        />
+        <MenuItem
+          title="Naval Battle Guide"
+          borderColor="#2e5ea8"
+          onClick={() => subView.push({
+            title: 'Naval Battle Guide',
+            render: () => <NavalBattleWorkflow powerId={powerId} />,
           })}
         />
         <MenuItem
@@ -122,7 +138,7 @@ export default function PlayerTurn({ powerId }) {
           borderColor="#c0392b"
           onClick={() => subView.push({
             title: 'Combat & CRT',
-            render: () => <CombatView />,
+            render: () => <CombatView powerId={powerId} />,
           })}
         />
         <MenuItem

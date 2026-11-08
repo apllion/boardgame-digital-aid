@@ -4,7 +4,7 @@ import {
   BATTLE_SEQUENCE, SUPPORT_RULES,
   WAR_AIMS, TREATY_OPTIONS, VICTORY_TYPES, REFUSING_WAR,
   MINOR_POWER_ALLIANCES, MINOR_POWER_NOTES,
-  EF_RULES,
+  EF_RULES, POWER_CONTEXT,
   STACKING_RULES, ALLIANCE_RESOLUTION,
   FLASHPOINTS, FLASHPOINT_SUMMARY,
   ITALY_EVENT, KINGDOM_OF_ITALY,
@@ -30,11 +30,121 @@ import {
   ITALIAN_REDEPLOYMENT, ITALY_FLASHPOINT, ITALY_GOTCHAS,
   ITALY_DESIGNER_RULINGS,
 } from '../data/italy'
+import {
+  LAND_BATTLE_WORKFLOW, NAVAL_BATTLE_WORKFLOW, TRENCH_BATTLE_NOTES,
+} from '../data/combatWorkflow'
 
-export function ActionsView({ isWartime }) {
+function CombatStepView({ workflow, title, trenchNotes }) {
+  return (
+    <div>
+      {workflow.map(step => (
+        <div key={step.step} className="card" style={{ borderLeftColor: step.crt ? '#c0392b' : '#4caf50', marginBottom: '0.5rem' }}>
+          <div className="card-title">Step {step.step}: {step.title}</div>
+          <div className="card-detail">{step.detail}</div>
+          {step.substeps && (
+            <div style={{ marginTop: '0.4rem' }}>
+              {step.substeps.map((sub, i) => (
+                <div key={i} style={{ marginTop: '0.35rem' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#ccc' }}>{sub.label}</div>
+                  <div style={{ fontSize: '0.8rem', color: '#aaa' }}>{sub.detail}</div>
+                  {sub.modifiers && (
+                    <table className="reference-table" style={{ marginTop: '0.25rem' }}>
+                      <tbody>
+                        {sub.modifiers.map((m, j) => (
+                          <tr key={j}>
+                            <td style={{ textAlign: 'left', fontSize: '0.78rem' }}>{m.name}</td>
+                            <td style={{ fontWeight: 600, whiteSpace: 'nowrap', fontSize: '0.78rem' }}>{m.value}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {step.modifiers && (
+            <table className="reference-table" style={{ marginTop: '0.35rem' }}>
+              <tbody>
+                {step.modifiers.map((m, j) => (
+                  <tr key={j}>
+                    <td style={{ textAlign: 'left', fontSize: '0.78rem' }}>{m.name}</td>
+                    <td style={{ fontWeight: 600, whiteSpace: 'nowrap', fontSize: '0.78rem' }}>{m.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          {step.crt && (
+            <table className="reference-table" style={{ marginTop: '0.35rem' }}>
+              <thead><tr><th>Differential</th><th>Att/Def</th><th>Victor</th></tr></thead>
+              <tbody>
+                {CRT.map((row, i) => (
+                  <tr key={i}>
+                    <td style={{ fontWeight: 600 }}>{row.differential}</td>
+                    <td>{row.attDef}</td>
+                    <td>{row.victor}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          {step.notes && (
+            <ul className="rules-list" style={{ marginTop: '0.3rem' }}>
+              {step.notes.map((n, i) => <li key={i} style={{ fontSize: '0.78rem' }}>{n}</li>)}
+            </ul>
+          )}
+        </div>
+      ))}
+      {trenchNotes && (
+        <div className="card" style={{ borderLeftColor: '#2e5ea8' }}>
+          <div className="card-title">Trench Battle Notes (GW)</div>
+          <ul className="rules-list">
+            {trenchNotes.map((n, i) => <li key={i} style={{ fontSize: '0.78rem' }}>{n}</li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function LandBattleWorkflow({ powerId }) {
+  return (
+    <div>
+      <PowerNotes powerId={powerId} context="combat" />
+      <CombatStepView workflow={LAND_BATTLE_WORKFLOW} title="Land Battle" trenchNotes={TRENCH_BATTLE_NOTES} />
+    </div>
+  )
+}
+
+export function NavalBattleWorkflow({ powerId }) {
+  return (
+    <div>
+      <PowerNotes powerId={powerId} context="combat" />
+      <CombatStepView workflow={NAVAL_BATTLE_WORKFLOW} title="Naval Battle" />
+    </div>
+  )
+}
+
+function PowerNotes({ powerId, context }) {
+  const notes = POWER_CONTEXT[powerId]?.[context]
+  if (!notes || notes.length === 0) return null
+  return (
+    <div className="card highlight" style={{ borderLeftColor: '#f9a825', marginBottom: '0.75rem' }}>
+      <div className="card-title" style={{ fontSize: '0.8rem' }}>Your Power</div>
+      <ul className="rules-list">
+        {notes.map((n, i) => <li key={i} style={{ fontSize: '0.8rem' }}>{n}</li>)}
+      </ul>
+    </div>
+  )
+}
+
+export function ActionsView({ isWartime, powerId }) {
   const actions = isWartime ? WARTIME_ACTIONS_DETAILED : PEACETIME_ACTIONS
   return (
-    <table className="reference-table">
+    <div>
+      <PowerNotes powerId={powerId} context="actions" />
+      <table className="reference-table">
       <thead><tr><th style={{ textAlign: 'left' }}>Action</th><th>Cost</th></tr></thead>
       <tbody>
         {actions.map((a, i) => (
@@ -51,12 +161,14 @@ export function ActionsView({ isWartime }) {
         ))}
       </tbody>
     </table>
+    </div>
   )
 }
 
-export function CombatView() {
+export function CombatView({ powerId }) {
   return (
     <div>
+      <PowerNotes powerId={powerId} context="combat" />
       <div className="card" style={{ borderLeftColor: '#c0392b' }}>
         <div className="card-title">Land Battle Sequence</div>
         <ol className="rules-list" style={{ paddingLeft: '1.2rem' }}>

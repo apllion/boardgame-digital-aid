@@ -285,7 +285,8 @@ export const NATIONAL_CHARACTERISTICS = {
   GE: [
     'Starts divided - must unify German minor powers [33.1]',
     'Bismarck allows targeting two powers in war of unification',
-    'Strong military tradition (+1 DRM in some contexts) [33.1]',
+    '+1 combat DRM before unification [33.1]',
+    'Pacification costs 2 CP if not unified [12.13]',
     'Industry is crucial for cards and reserve armies',
   ],
   UK: [
@@ -294,33 +295,67 @@ export const NATIONAL_CHARACTERISTICS = {
     'Balance of Power response card is unique and powerful',
     'Cannot declare offensive wars easily [33.2]',
     'Can pass with 2 cards remaining [12.0]',
+    '+1 naval interception into North Atlantic [19.1]',
   ],
   FR: [
     'City of Light points as unique victory mechanic [33.3]',
     'Napoleon\'s Legacy enables aggressive expansion',
-    'Strong starting position but surrounded',
     'Aux Armes allows targeting two keys/powers',
   ],
   AU: [
     'Dual Monarchy - citizenship/rights mechanic [33.4]',
-    'Precarious position between multiple rivals',
+    'Pacification always costs 2 CP [12.13]',
     'Habsburg Dynasty strong for German influence',
+    'Unification targets: spaces with AU citizenship nationalities [13.2]',
     'Must manage multiple nationalities [33.4]',
   ],
   RU: [
-    'Eastern ambitions - Asia expansion [33.5]',
-    'Russo-Turkish Wars are powerful against OT',
+    'Russo-Turkish Wars: may liberate Balkans not in rebellion [13.1.2]',
     'Trans-Siberian Railroad as long-term investment [33.5]',
-    'Industrial deficit must be overcome',
     'Highest army potential [33.5]',
+    'Industrial deficit must be overcome',
   ],
   OT: [
+    'Jihad markers: -1 DRM to enemy in combat [18.2.8]',
     'Modernization depends on other players\' cooperation [33.6]',
-    'Jihad markers provide unique combat advantage [33.6]',
     'Defensive posture - protect home spaces',
     'Industrial challenge - needs help to industrialize [33.6]',
     'Egypt is strategically critical',
   ],
+}
+
+// Power-specific notes for contextual display in other views
+export const POWER_CONTEXT = {
+  GE: {
+    actions: ['+1 combat DRM before unification [33.1]', 'Pacification: 2 CP if not unified [12.13]'],
+    combat: ['+1 combat DRM before unification [33.1]'],
+    war: ['Bismarck: may target two powers in war of unification', 'Unification war aim for German minor powers'],
+  },
+  UK: {
+    actions: ['Can pass with 2 cards remaining (not 1) [12.0]', 'Naval power: Two Power Standard [33.2]'],
+    combat: ['+1 naval interception into North Atlantic [19.1]'],
+    war: ['Cannot declare offensive wars easily [33.2]', 'Balance of Power response card'],
+  },
+  FR: {
+    actions: [],
+    combat: [],
+    war: ['Aux Armes: may target two keys/powers', 'City of Light victory points [33.3]'],
+  },
+  AU: {
+    actions: ['Pacification always costs 2 CP [12.13]', 'Citizenship/nationality mechanic [33.4]'],
+    combat: [],
+    war: ['Unification: spaces with AU citizenship nationalities [13.2]', 'May liberate Italian spaces (before unification) [13.1.2]'],
+  },
+  RU: {
+    actions: [],
+    combat: [],
+    war: ['Russo-Turkish Wars: may liberate Balkans not in rebellion [13.1.2]'],
+  },
+  OT: {
+    actions: [],
+    combat: ['Jihad markers: -1 DRM to enemy [18.2.8]'],
+    war: [],
+  },
 }
 
 // Hand Size determinants
