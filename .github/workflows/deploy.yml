@@ -35,12 +35,26 @@ jobs:
           npm ci
           npm run build
 
+      - name: Build Star Realms
+        working-directory: star-realms
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build Space Empires
+        working-directory: space-empires
+        run: |
+          npm ci
+          npm run build
+
       - name: Assemble site
         run: |
-          mkdir -p _site/imperial-elegy _site/coinbots
+          mkdir -p _site/imperial-elegy _site/coinbots _site/star-realms _site/space-empires
           cp index.html _site/
           cp -r imperial-elegy/dist/* _site/imperial-elegy/
           cp -r coinbots/dist/* _site/coinbots/
+          cp -r star-realms/dist/* _site/star-realms/
+          cp -r space-empires/dist/* _site/space-empires/
 
       - uses: actions/upload-pages-artifact@v3
         with:
